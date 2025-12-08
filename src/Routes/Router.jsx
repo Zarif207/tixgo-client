@@ -5,6 +5,8 @@ import AllTickets from "../Pages/Other/AllTickets";
 import AuthLayout from "../Layouts/AuthLayout";
 import Login from "../Pages/Auth/Login";
 import Register from "../Pages/Auth/Register";
+import Vendor from "../Pages/Other/Vendor";
+import PrivateRoute from "./PrivateRoute";
 
 export const router = createBrowserRouter([
   {
@@ -22,6 +24,12 @@ export const router = createBrowserRouter([
       {
         path: "/dashboard",
         element: <Home />,
+      },
+      {
+        path: "/vendor",
+        element: <PrivateRoute>
+            <Vendor/>
+        </PrivateRoute>
       },
     ],
   },

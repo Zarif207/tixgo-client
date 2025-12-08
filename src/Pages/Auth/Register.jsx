@@ -13,6 +13,7 @@ const Register = () => {
     handleSubmit,
     formState: { errors },
   } = useForm();
+
   const { userRegister, updateUserProfile } = UseAuth();
   const location = useLocation();
   const navigate = useNavigate();
@@ -20,61 +21,63 @@ const Register = () => {
 
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleRegistration = (data) => {
-    const profileImg = data.photo[0];
-    userRegister(data.email, data.password)
-      .then(() => {
-        const formData = new FormData();
-        formData.append("image", profileImg);
+  const handleRegistration = async (data) => {
+    try {
+      const profileImg = data.photo[0];
 
-        const Image_API_URL = `https://api.imgbb.com/1/upload?key=${
-          import.meta.env.VITE_image_hosting_key
-        }`;
+      // Register user in Firebase
+      await userRegister(data.email, data.password);
 
-        axios.post(Image_API_URL, formData).then((res) => {
-          const photoURL = res.data.data.url;
+      
+      const formData = new FormData();
+      formData.append("image", profileImg);
 
-          const userInfo = {
-            email: data.email,
-            displayName: data.name,
-            photoURL: photoURL,
-          };
+      const imageKey = import.meta.env.VITE_IMGBB_API_KEY;
 
-          axiosSecure.post("/users", userInfo).then((res) => {
-            if (res.data.insertedId) {
-              console.log("user created in the database");
-            }
-          });
+      if (!imageKey) {
+        console.error("❌ Missing imgbb API key!");
+        alert("Image upload API key is missing. Fix your .env");
+        return;
+      }
 
-          const userProfile = {
-            displayName: data.name,
-            photoURL: photoURL,
-          };
+      const uploadURL = `https://api.imgbb.com/1/upload?key=${imageKey}`;
 
-          updateUserProfile(userProfile)
-            .then(() => {
-              navigate(location.state || "/");
-            })
-            .catch((error) => {
-              console.log(error.message);
-            });
-        });
-      })
-      .catch((error) => {
-        console.log(error.message);
+      const uploadRes = await axios.post(uploadURL, formData);
+      const photoURL = uploadRes.data.data.url;
+
+  
+      const userInfo = {
+        email: data.email,
+        displayName: data.name,
+        photoURL: photoURL,
+      };
+
+      const dbRes = await axiosSecure.post("/users", userInfo);
+      if (dbRes.data.insertedId) {
+        console.log("User saved to DB");
+      }
+
+    
+      await updateUserProfile({
+        displayName: data.name,
+        photoURL: photoURL,
       });
+
+      navigate(location.state || "/");
+    } catch (error) {
+      console.log("Registration error:", error.message);
+    }
   };
 
   return (
     <div className="w-full max-w-sm mx-auto bg-white shadow-xl rounded-2xl p-8 border border-gray-100">
-      {/* Title + Subtitle (matching Login) */}
       <h3 className="text-3xl font-bold text-center mb-2">Create an Account</h3>
       <p className="text-center text-gray-500 mb-6">
         Register to continue using ZapShift
       </p>
 
       <form className="space-y-4" onSubmit={handleSubmit(handleRegistration)}>
-        <fieldset className="fieldset space-y-3">
+        <fieldset className="space-y-4">
           {/* Name */}
           <div className="flex flex-col gap-1">
             <label className="font-medium">Name</label>
@@ -134,13 +137,13 @@ const Register = () => {
                 autoComplete="new-password"
               />
 
+              {/* Eye Icon */}
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                aria-label={showPassword ? "Hide password" : "Show password"}
-                className="absolute right-3 top-1/2 -translate-y-1/2 z-20 text-xl text-gray-600 hover:text-gray-800"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-xl text-gray-600 hover:text-gray-800"
               >
-                {showPassword ? <FiEye /> : <FiEyeOff />}
+                {showPassword ? <FiEyeOff /> : <FiEye />}
               </button>
             </div>
 
@@ -154,18 +157,15 @@ const Register = () => {
             )}
             {errors.password?.type === "pattern" && (
               <p className="text-red-500">
-                Password must include uppercase, lowercase, number, and special
-                character
+                Must include uppercase, lowercase, number & special character
               </p>
             )}
           </div>
 
-          {/* Submit */}
           <button className="btn btn-neutral w-full rounded-lg mt-2">
             Register
           </button>
 
-          {/* Login link */}
           <p className="text-sm text-center">
             Already have an account?{" "}
             <Link

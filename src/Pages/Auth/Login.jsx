@@ -19,7 +19,7 @@ const Login = () => {
 
   const handleLogIn = (data) => {
     signInUser(data.email, data.password)
-      .then(() => navigate(location.state || "/"))
+      .then(() => navigate(location?.state || "/"))
       .catch((error) => console.log(error.message));
   };
 

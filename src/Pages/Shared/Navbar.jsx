@@ -21,6 +21,9 @@ const Navbar = () => {
       <li>
         <NavLink to="/dashboard">Dashboard</NavLink>
       </li>
+      <li>
+        <NavLink to="/vendor">Vendor</NavLink>
+      </li>
     </>
   );
 
