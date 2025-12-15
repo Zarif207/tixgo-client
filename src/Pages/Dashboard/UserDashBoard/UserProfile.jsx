@@ -1,39 +1,100 @@
-import React, { useState } from "react";
+import React from "react";
+import { useQuery } from "@tanstack/react-query";
+import UseAxios from "../../../Hooks/UseAxios";
+import UseAuth from "../../../Hooks/UseAuth";
+
 
 const UserProfile = () => {
-    // Dummy user info — replace with real API data later
-    const [user] = useState({
-        name: "John Doe",
-        email: "johndoe@example.com",
-        role: "User",
-        photo: "https://i.pravatar.cc/150?img=3", // temporary avatar
-    });
+  const axios = UseAxios();
+  const { user } = UseAuth();
 
+  const email = user?.email;
+
+  const {
+    data: profile,
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ["userProfile", email],
+    enabled: !!email,
+    queryFn: async () => {
+      const res = await axios.get(`/users/${email}`);
+      return res.data;
+    },
+  });
+
+  /* ---------- States ---------- */
+
+  if (!email) {
     return (
-        <div className="max-w-lg mx-auto mt-10 p-6 bg-white shadow rounded-lg">
-            <h2 className="text-2xl font-semibold mb-5 text-center">User Profile</h2>
-
-            <div className="flex flex-col items-center">
-                {/* Profile Image */}
-                <img
-                    src={user.photo}
-                    alt="Profile"
-                    className="w-32 h-32 rounded-full border shadow mb-4"
-                />
-
-                {/* User Info */}
-                <h3 className="text-xl font-semibold">{user.name}</h3>
-                <p className="text-gray-600">{user.email}</p>
-
-                <span
-                    className="mt-3 px-4 py-1 rounded-full text-sm text-white 
-                    bg-blue-600"
-                >
-                    {user.role}
-                </span>
-            </div>
-        </div>
+      <div className="text-center mt-10 text-gray-500">
+        Please log in to view your profile.
+      </div>
     );
+  }
+
+  if (isLoading) {
+    return (
+      <div className="text-center mt-10 text-lg font-semibold">
+        Loading profile...
+      </div>
+    );
+  }
+
+  if (isError || !profile) {
+    return (
+      <div className="text-center mt-10 text-red-600">
+        Failed to load profile.
+      </div>
+    );
+  }
+
+  /* ---------- UI ---------- */
+
+  return (
+    <div className="max-w-lg mx-auto mt-10 p-6 bg-white shadow rounded-lg">
+      <h2 className="text-2xl font-semibold mb-6 text-center">
+        User Profile
+      </h2>
+
+      <div className="flex flex-col items-center">
+        {/* Profile Image */}
+        <img
+          src={profile.photo || user?.photoURL || "https://i.pravatar.cc/150"}
+          alt="Profile"
+          className="w-32 h-32 rounded-full border shadow mb-4 object-cover"
+        />
+
+        {/* Name */}
+        <h3 className="text-xl font-semibold">
+          {profile.name || user?.displayName || "No Name"}
+        </h3>
+
+        {/* Email */}
+        <p className="text-gray-600">{profile.email}</p>
+
+        {/* Role Badge */}
+        <span
+          className={`mt-3 px-4 py-1 rounded-full text-sm text-white capitalize ${
+            profile.role === "admin"
+              ? "bg-red-600"
+              : profile.role === "vendor"
+              ? "bg-green-600"
+              : "bg-blue-600"
+          }`}
+        >
+          {profile.role}
+        </span>
+
+        {/* Joined */}
+        {profile.createdAt && (
+          <p className="mt-3 text-sm text-gray-500">
+            Joined: {new Date(profile.createdAt).toLocaleDateString()}
+          </p>
+        )}
+      </div>
+    </div>
+  );
 };
 
 export default UserProfile;

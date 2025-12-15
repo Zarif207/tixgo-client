@@ -24,9 +24,9 @@ import Login from "../Pages/Auth/Login";
 import Register from "../Pages/Auth/Register";
 import MyAddedTickets from "../Pages/Dashboard/VendorDashboard/MyAddedTickets";
 import TicketDetails from "../Pages/Other/TicketDetails";
-
-
-
+import PaymentSuccess from "../Pages/Payments/PaymentSuccess";
+import PaymentCancelled from "../Pages/Payments/PaymentCancelled";
+import PaymentFailed from "../Pages/Payments/PaymentFailed";
 
 export const router = createBrowserRouter([
   // ---------------------------------------------------------
@@ -36,13 +36,18 @@ export const router = createBrowserRouter([
     path: "/",
     element: <RootLayout />,
     children: [
-      { index: true, element: <Home /> },
-      { path: "all-tickets", element: <AllTickets /> },
       {
-        path: 'ticket-details/:id',
-        element: <TicketDetails/>
-      }
-      
+        index: true,
+        element: <Home />,
+      },
+      {
+        path: "all-tickets",
+        element: <AllTickets />,
+      },
+      {
+        path: "ticket-details/:id",
+        element: <TicketDetails />,
+      },
     ],
   },
 
@@ -53,8 +58,14 @@ export const router = createBrowserRouter([
     path: "/auth",
     element: <AuthLayout />,
     children: [
-      { path: "login", element: <Login /> },
-      { path: "register", element: <Register /> },
+      {
+        path: "login",
+        element: <Login />,
+      },
+      {
+        path: "register",
+        element: <Register />,
+      },
     ],
   },
 
@@ -66,22 +77,70 @@ export const router = createBrowserRouter([
     element: <DashboardLayout />,
     children: [
       // ========== ADMIN ==========
-      { path: "admin/profile", element: <AdminProfile /> },
-      { path: "admin/manage-tickets", element: <ManageTickets /> },
-      { path: "admin/manage-users", element: <ManageUsers /> },
-      { path: "admin/advertise-tickets", element: <AdvertiseTickets /> },
+      {
+        path: "admin/profile",
+        element: <AdminProfile />,
+      },
+      {
+        path: "admin/manage-tickets",
+        element: <ManageTickets />,
+      },
+      {
+        path: "admin/manage-users",
+        element: <ManageUsers />,
+      },
+      {
+        path: "admin/advertise-tickets",
+        element: <AdvertiseTickets />,
+      },
 
       // ========== USER ==========
-      { path: "user/profile", element: <UserProfile /> },
-      { path: "user/my-booked-tickets", element: <MyBookedTickets /> },
-      { path: "user/transactions", element: <Transaction/> },
+      {
+        path: "user/profile",
+        element: <UserProfile />,
+      },
+      {
+        path: "user/my-booked-tickets",
+        element: <MyBookedTickets />,
+      },
+      {
+        path: "user/transactions",
+        element: <Transaction />,
+      },
+      {
+        path: "user/payment-success",
+        element: <PaymentSuccess />,
+      },
+      {
+        path: "user/payment-cancelled",
+        element: <PaymentCancelled />,
+      },
+      {
+        path: "user/payment-failed",
+        element: <PaymentFailed />,
+      },
 
       // ========== VENDOR ==========
-      { path: "vendor/profile", element: <VendorProfile /> },
-      { path: "vendor/add-ticket", element: <AddTicket /> },
-      { path: "vendor/my-added-tickets", element: <MyAddedTickets/> },
-      { path: "vendor/requested-bookings", element: <RequestedBookings /> },
-      { path: "vendor/revenue", element: <Revenue/> },
+      {
+        path: "vendor/profile",
+        element: <VendorProfile />,
+      },
+      {
+        path: "vendor/add-ticket",
+        element: <AddTicket />,
+      },
+      {
+        path: "vendor/my-added-tickets",
+        element: <MyAddedTickets />,
+      },
+      {
+        path: "vendor/requested-bookings",
+        element: <RequestedBookings />,
+      },
+      {
+        path: "vendor/revenue",
+        element: <Revenue />,
+      },
     ],
   },
 ]);

@@ -42,6 +42,9 @@ const DashboardLayout = () => {
             <li><Link to="/dashboard/user/profile">User Profile</Link></li>
             <li><Link to="/dashboard/user/my-booked-tickets">My Booked Tickets</Link></li>
             <li><Link to="/dashboard/user/transactions">Transaction History</Link></li>
+            <li><Link to="/dashboard/user/payment-success">Payment Success</Link></li>
+            <li><Link to="/dashboard/user/payment-cancelled">Payment Cancelled</Link></li>
+            <li><Link to="/dashboard/user/payment-failed">Payment Failed</Link></li>
           </ul>
         </div>
 

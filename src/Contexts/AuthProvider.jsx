@@ -32,9 +32,11 @@ const AuthProvider = ({ children }) => {
     return signInWithPopup(auth, googleProvider);
   };
 
-  const updateUserProfile = (profile) => {
-    setLoading(true);
-    return updateProfile(auth.currentUser, { profile });
+  const updateUserProfile = ({ displayName, photoURL }) => {
+    return updateProfile(auth.currentUser, {
+      displayName,
+      photoURL,
+    });
   };
 
   const signOutUser = () => {
@@ -42,15 +44,12 @@ const AuthProvider = ({ children }) => {
     return signOut(auth);
   };
 
-  //   observe auth state change
   useEffect(() => {
     const unSubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
       setLoading(false);
     });
-    return () => {
-      unSubscribe();
-    };
+    return () => unSubscribe();
   }, []);
 
   const authInfo = {
@@ -62,8 +61,12 @@ const AuthProvider = ({ children }) => {
     user,
     loading,
   };
-  return <AuthContext value={authInfo}>{children}</AuthContext>;
+
+  return (
+    <AuthContext.Provider value={authInfo}>
+      {children}
+    </AuthContext.Provider>
+  );
 };
 
 export default AuthProvider;
-

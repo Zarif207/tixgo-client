@@ -1,158 +1,148 @@
 import React, { useEffect, useState } from "react";
+import UseAxiosSecure from "../../../Hooks/UseAxiosSecure";
+import UseAuth from "../../../Hooks/UseAuth";
+
 
 const MyBookedTickets = () => {
-    // Dummy booked tickets — replace with API later
-    const [bookedTickets, setBookedTickets] = useState([
-        {
-            id: 1,
-            title: "Dhaka to Chittagong Bus",
-            image: "https://i.ibb.co/9c8ZRw4/bus.jpg",
-            quantity: 2,
-            price: 500,
-            from: "Dhaka",
-            to: "Chittagong",
-            departure: "2025-12-15T18:30:00",
-            status: "pending",
-        },
-        {
-            id: 2,
-            title: "Dhaka to Sylhet Train",
-            image: "https://i.ibb.co/2n9Bw8S/train.jpg",
-            quantity: 1,
-            price: 800,
-            from: "Dhaka",
-            to: "Sylhet",
-            departure: "2025-12-12T10:00:00",
-            status: "accepted",
-        },
-        {
-            id: 3,
-            title: "Dhaka to Cox’s Bazar Plane",
-            image: "https://i.ibb.co/t8t4j0p/plane.jpg",
-            quantity: 3,
-            price: 3000,
-            from: "Dhaka",
-            to: "Cox's Bazar",
-            departure: "2025-12-09T09:00:00",
-            status: "rejected",
-        }
-    ]);
+  const axiosSecure = UseAxiosSecure();
+  const { user } = UseAuth();
 
-    const [timeLeft, setTimeLeft] = useState({});
+  const [bookedTickets, setBookedTickets] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [timeLeft, setTimeLeft] = useState({});
 
-    // Countdown Timer
-    useEffect(() => {
-        const interval = setInterval(() => {
-            const updated = {};
-            bookedTickets.forEach((ticket) => {
-                const depTime = new Date(ticket.departure).getTime();
-                const now = Date.now();
-                const diff = depTime - now;
+  // ---------------------------
+  // Fetch bookings
+  // ---------------------------
+  useEffect(() => {
+    if (!user?.email) return;
 
-                if (diff > 0 && ticket.status !== "rejected") {
-                    const hours = Math.floor(diff / (1000 * 60 * 60));
-                    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-                    const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+    setLoading(true);
 
-                    updated[ticket.id] = `${hours}h ${minutes}m ${seconds}s`;
-                } else {
-                    updated[ticket.id] = "Time Expired";
-                }
-            });
+    axiosSecure
+      .get(`/bookings?email=${user.email}`)
+      .then((res) => {
+        setBookedTickets(res.data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error("Booking fetch error:", err);
+        setLoading(false);
+      });
+  }, [user?.email, axiosSecure]);
 
-            setTimeLeft(updated);
-        }, 1000);
+  // ---------------------------
+  // Countdown
+  // ---------------------------
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const updated = {};
 
-        return () => clearInterval(interval);
-    }, [bookedTickets]);
-
-    // Payment eligibility check
-    const canPay = (ticket) => {
+      bookedTickets.forEach((ticket) => {
         const depTime = new Date(ticket.departure).getTime();
-        const now = Date.now();
+        const now = new Date().getTime();
+        const diff = depTime - now;
 
-        return (
-            ticket.status === "accepted" &&
-            depTime > now // cannot pay after departure
-        );
-    };
+        if (diff > 0 && ticket.status !== "rejected") {
+          const h = Math.floor(diff / (1000 * 60 * 60));
+          const m = Math.floor((diff / (1000 * 60)) % 60);
+          const s = Math.floor((diff / 1000) % 60);
+          updated[ticket._id] = `${h}h ${m}m ${s}s`;
+        }
+      });
 
-    return (
-        <div className="p-6">
-            <h2 className="text-2xl font-semibold mb-5">My Booked Tickets</h2>
+      setTimeLeft(updated);
+    }, 1000);
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {bookedTickets.map((ticket) => {
-                    const totalPrice = ticket.price * ticket.quantity;
+    return () => clearInterval(interval);
+  }, [bookedTickets]);
 
-                    return (
-                        <div key={ticket.id} className="bg-white shadow rounded-lg p-5">
-                            {/* Image */}
-                            <img
-                                src={ticket.image}
-                                alt={ticket.title}
-                                className="w-full h-40 object-cover rounded"
-                            />
+  // ---------------------------
+  // Can Pay?
+  // ---------------------------
+  const canPay = (ticket) => {
+    const depTime = new Date(ticket.departure).getTime();
+    const now = new Date().getTime();
+    return ticket.status === "accepted" && depTime > now;
+  };
 
-                            <h3 className="mt-3 text-lg font-semibold">{ticket.title}</h3>
+  // ---------------------------
+  // Pay Now
+  // ---------------------------
+  const handlePayNow = async (ticket) => {
+    try {
+      const res = await axiosSecure.post("/create-ticket-checkout", {
+        bookingId: ticket._id,
+      });
 
-                            <p className="text-sm text-gray-600 mt-2">
-                                <strong>From:</strong> {ticket.from} →
-                                <strong> To:</strong> {ticket.to}
-                            </p>
+      if (res.data?.url) {
+        window.location.assign(res.data.url); // safer than href
+      }
+    } catch (err) {
+      console.error("Payment error:", err);
+    }
+  };
 
-                            <p className="text-sm text-gray-600">
-                                <strong>Departure:</strong>{" "}
-                                {new Date(ticket.departure).toLocaleString()}
-                            </p>
+  // ---------------------------
+  // UI states
+  // ---------------------------
+  if (loading) return <p className="p-6">Loading...</p>;
 
-                            <p className="mt-2">
-                                <strong>Quantity:</strong> {ticket.quantity}
-                            </p>
+  if (bookedTickets.length === 0)
+    return <p className="p-6 text-gray-500">No bookings found.</p>;
 
-                            <p>
-                                <strong>Total Price:</strong> ৳{totalPrice}
-                            </p>
+  // ---------------------------
+  // UI
+  // ---------------------------
+  return (
+    <div className="p-6">
+      <h2 className="text-2xl font-semibold mb-5">My Booked Tickets</h2>
 
-                            {/* Status Badge */}
-                            <span
-                                className={`inline-block mt-3 px-4 py-1 rounded-full text-white text-sm
-                                    ${
-                                        ticket.status === "pending"
-                                            ? "bg-yellow-500"
-                                            : ticket.status === "accepted"
-                                            ? "bg-blue-600"
-                                            : ticket.status === "paid"
-                                            ? "bg-green-600"
-                                            : "bg-red-600"
-                                    }
-                                `}
-                            >
-                                {ticket.status}
-                            </span>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {bookedTickets.map((ticket) => (
+          <div key={ticket._id} className="bg-white shadow rounded-lg p-5">
+            <img
+              src={ticket.image}
+              alt={ticket.title}
+              className="w-full h-40 object-cover rounded"
+            />
 
-                            {/* Countdown */}
-                            {ticket.status !== "rejected" && (
-                                <p className="text-sm mt-3 text-gray-700">
-                                    <strong>Countdown:</strong>{" "}
-                                    {timeLeft[ticket.id] || "Loading..."}
-                                </p>
-                            )}
+            <h3 className="mt-3 font-semibold">{ticket.title}</h3>
 
-                            {/* Pay Now button */}
-                            {canPay(ticket) && (
-                                <button
-                                    className="w-full mt-4 bg-green-600 hover:bg-green-700 text-white py-2 rounded"
-                                >
-                                    Pay Now
-                                </button>
-                            )}
-                        </div>
-                    );
-                })}
-            </div>
-        </div>
-    );
+            <p className="text-sm">
+              {ticket.from} → {ticket.to}
+            </p>
+
+            <p className="text-sm">
+              {new Date(ticket.departure).toLocaleString()}
+            </p>
+
+            <p>Quantity: {ticket.quantity}</p>
+            <p>Total: ৳{ticket.price * ticket.quantity}</p>
+
+            <span className="inline-block mt-2 px-3 py-1 text-sm rounded-full bg-gray-200">
+              {ticket.status}
+            </span>
+
+            {timeLeft[ticket._id] && (
+              <p className="text-sm mt-2">
+                Countdown: {timeLeft[ticket._id]}
+              </p>
+            )}
+
+            {canPay(ticket) && (
+              <button
+                onClick={() => handlePayNow(ticket)}
+                className="w-full mt-3 bg-green-600 text-white py-2 rounded"
+              >
+                Pay Now
+              </button>
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
 };
 
 export default MyBookedTickets;
