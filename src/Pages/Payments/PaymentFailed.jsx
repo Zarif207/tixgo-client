@@ -18,7 +18,7 @@ const PaymentFailed = () => {
 
         <div className="flex flex-col gap-3">
           <Link
-            to="/dashboard/my-bookings"
+            to="/dashboard/user/my-booked-tickets"
             className="bg-red-600 hover:bg-red-700 text-white py-2 rounded"
           >
             Retry Payment

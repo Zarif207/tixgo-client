@@ -4,7 +4,7 @@ import { FaCheckCircle } from "react-icons/fa";
 
 const PaymentSuccess = () => {
   const [searchParams] = useSearchParams();
-  const sessionId = searchParams.get("session_id"); // optional
+  const sessionId = searchParams.get("session_id");
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-green-50 px-4">
@@ -27,7 +27,7 @@ const PaymentSuccess = () => {
 
         <div className="flex flex-col gap-3">
           <Link
-            to="/dashboard/my-bookings"
+            to="/dashboard/user/my-booked-tickets"
             className="bg-green-600 hover:bg-green-700 text-white py-2 rounded"
           >
             View My Bookings

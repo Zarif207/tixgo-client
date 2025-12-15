@@ -1,37 +1,51 @@
 import React from "react";
 import { createBrowserRouter } from "react-router";
 
-// Layouts
+// ================== LAYOUTS ==================
 import RootLayout from "../Layouts/RootLayout";
 import AuthLayout from "../Layouts/AuthLayout";
 import DashboardLayout from "../Layouts/DashboardLayout";
-import AdminProfile from "../Pages/Dashboard/AdminDashboard/AdminProfile";
-import ManageTickets from "../Pages/Dashboard/AdminDashboard/ManageTickets";
-import ManageUsers from "../Pages/Dashboard/AdminDashboard/ManageUsers";
-import AdvertiseTickets from "../Pages/Dashboard/AdminDashboard/AdvertiseTickets";
-import UserProfile from "../Pages/Dashboard/UserDashBoard/UserProfile";
-import MyBookedTickets from "../Pages/Dashboard/UserDashBoard/MyBookedTickets";
-import Transaction from "../Pages/Dashboard/UserDashBoard/Transaction";
-import VendorProfile from "../Pages/Dashboard/VendorDashboard/VendorProfile";
-import AddTicket from "../Pages/Dashboard/VendorDashboard/AddTicket";
 
-import RequestedBookings from "../Pages/Dashboard/VendorDashboard/RequestedBookings";
-import Revenue from "../Pages/Dashboard/VendorDashboard/Revenue";
+// ================== PAGES ==================
 
+// ----- Home / Public -----
 import Home from "../Pages/Home/Home";
 import AllTickets from "../Pages/Other/AllTickets";
+import TicketDetails from "../Pages/Other/TicketDetails";
+
+// ----- Auth -----
 import Login from "../Pages/Auth/Login";
 import Register from "../Pages/Auth/Register";
-import MyAddedTickets from "../Pages/Dashboard/VendorDashboard/MyAddedTickets";
-import TicketDetails from "../Pages/Other/TicketDetails";
+
+// ----- Payments (GLOBAL) -----
 import PaymentSuccess from "../Pages/Payments/PaymentSuccess";
 import PaymentCancelled from "../Pages/Payments/PaymentCancelled";
 import PaymentFailed from "../Pages/Payments/PaymentFailed";
 
+// ----- Admin Dashboard -----
+import AdminProfile from "../Pages/Dashboard/AdminDashboard/AdminProfile";
+import ManageTickets from "../Pages/Dashboard/AdminDashboard/ManageTickets";
+import ManageUsers from "../Pages/Dashboard/AdminDashboard/ManageUsers";
+import AdvertiseTickets from "../Pages/Dashboard/AdminDashboard/AdvertiseTickets";
+
+// ----- User Dashboard -----
+import UserProfile from "../Pages/Dashboard/UserDashBoard/UserProfile";
+import MyBookedTickets from "../Pages/Dashboard/UserDashBoard/MyBookedTickets";
+import Transaction from "../Pages/Dashboard/UserDashBoard/Transaction";
+
+// ----- Vendor Dashboard -----
+import VendorProfile from "../Pages/Dashboard/VendorDashboard/VendorProfile";
+import AddTicket from "../Pages/Dashboard/VendorDashboard/AddTicket";
+import MyAddedTickets from "../Pages/Dashboard/VendorDashboard/MyAddedTickets";
+import RequestedBookings from "../Pages/Dashboard/VendorDashboard/RequestedBookings";
+import Revenue from "../Pages/Dashboard/VendorDashboard/Revenue";
+
+// ================== ROUTER ==================
+
 export const router = createBrowserRouter([
-  // ---------------------------------------------------------
-  // ROOT LAYOUT
-  // ---------------------------------------------------------
+  // -------------------------------------------------
+  // ROOT (PUBLIC + PAYMENT)
+  // -------------------------------------------------
   {
     path: "/",
     element: <RootLayout />,
@@ -48,12 +62,26 @@ export const router = createBrowserRouter([
         path: "ticket-details/:id",
         element: <TicketDetails />,
       },
+
+      // ✅ PAYMENT ROUTES (STRIPE REDIRECTS HERE)
+      {
+        path: "payment-success",
+        element: <PaymentSuccess />,
+      },
+      {
+        path: "payment-cancelled",
+        element: <PaymentCancelled />,
+      },
+      {
+        path: "payment-failed",
+        element: <PaymentFailed />,
+      },
     ],
   },
 
-  // ---------------------------------------------------------
+  // -------------------------------------------------
   // AUTH ROUTES
-  // ---------------------------------------------------------
+  // -------------------------------------------------
   {
     path: "/auth",
     element: <AuthLayout />,
@@ -69,14 +97,14 @@ export const router = createBrowserRouter([
     ],
   },
 
-  // ---------------------------------------------------------
-  // DASHBOARD ROUTES (Admin, User, Vendor)
-  // ---------------------------------------------------------
+  // -------------------------------------------------
+  // DASHBOARD ROUTES
+  // -------------------------------------------------
   {
     path: "/dashboard",
     element: <DashboardLayout />,
     children: [
-      // ========== ADMIN ==========
+      // ===== ADMIN =====
       {
         path: "admin/profile",
         element: <AdminProfile />,
@@ -94,7 +122,7 @@ export const router = createBrowserRouter([
         element: <AdvertiseTickets />,
       },
 
-      // ========== USER ==========
+      // ===== USER =====
       {
         path: "user/profile",
         element: <UserProfile />,
@@ -107,20 +135,8 @@ export const router = createBrowserRouter([
         path: "user/transactions",
         element: <Transaction />,
       },
-      {
-        path: "user/payment-success",
-        element: <PaymentSuccess />,
-      },
-      {
-        path: "user/payment-cancelled",
-        element: <PaymentCancelled />,
-      },
-      {
-        path: "user/payment-failed",
-        element: <PaymentFailed />,
-      },
 
-      // ========== VENDOR ==========
+      // ===== VENDOR =====
       {
         path: "vendor/profile",
         element: <VendorProfile />,

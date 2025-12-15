@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import UseAxiosSecure from "../../../Hooks/UseAxiosSecure";
 import UseAuth from "../../../Hooks/UseAuth";
 
-
 const MyBookedTickets = () => {
   const axiosSecure = UseAxiosSecure();
   const { user } = UseAuth();
@@ -32,7 +31,7 @@ const MyBookedTickets = () => {
   }, [user?.email, axiosSecure]);
 
   // ---------------------------
-  // Countdown
+  // Countdown timer
   // ---------------------------
   useEffect(() => {
     const interval = setInterval(() => {
@@ -40,7 +39,7 @@ const MyBookedTickets = () => {
 
       bookedTickets.forEach((ticket) => {
         const depTime = new Date(ticket.departure).getTime();
-        const now = new Date().getTime();
+        const now = Date.now();
         const diff = depTime - now;
 
         if (diff > 0 && ticket.status !== "rejected") {
@@ -62,8 +61,7 @@ const MyBookedTickets = () => {
   // ---------------------------
   const canPay = (ticket) => {
     const depTime = new Date(ticket.departure).getTime();
-    const now = new Date().getTime();
-    return ticket.status === "accepted" && depTime > now;
+    return ticket.status === "accepted" && depTime > Date.now();
   };
 
   // ---------------------------
@@ -76,7 +74,7 @@ const MyBookedTickets = () => {
       });
 
       if (res.data?.url) {
-        window.location.assign(res.data.url); // safer than href
+        window.location.assign(res.data.url);
       }
     } catch (err) {
       console.error("Payment error:", err);
@@ -118,7 +116,7 @@ const MyBookedTickets = () => {
             </p>
 
             <p>Quantity: {ticket.quantity}</p>
-            <p>Total: ৳{ticket.price * ticket.quantity}</p>
+            <p>Total: ${ticket.price * ticket.quantity}</p>
 
             <span className="inline-block mt-2 px-3 py-1 text-sm rounded-full bg-gray-200">
               {ticket.status}

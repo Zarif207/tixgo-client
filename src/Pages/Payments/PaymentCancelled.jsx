@@ -18,7 +18,7 @@ const PaymentCancelled = () => {
 
         <div className="flex flex-col gap-3">
           <Link
-            to="/dashboard/my-bookings"
+            to="/dashboard/user/my-booked-tickets"
             className="bg-yellow-500 hover:bg-yellow-600 text-white py-2 rounded"
           >
             Try Again
