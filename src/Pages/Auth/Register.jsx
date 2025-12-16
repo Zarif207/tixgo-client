@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { Link, useLocation, useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import axios from "axios";
 import UseAuth from "../../Hooks/UseAuth";
 import UseAxiosSecure from "../../Hooks/UseAxiosSecure";
 import SocialLogin from "./SocialLogin";
 import { FiEye, FiEyeOff } from "react-icons/fi";
+import { auth } from "../../Firebase/Firebase.config";
 
 const Register = () => {
   const { register, handleSubmit } = useForm();
@@ -18,9 +19,10 @@ const Register = () => {
 
   const onSubmit = async (data) => {
     try {
+      // 1️⃣ Create Firebase user
       await userRegister(data.email, data.password);
 
-      // upload image
+      // 2️⃣ Upload image to imgbb
       const formData = new FormData();
       formData.append("image", data.photo[0]);
 
@@ -29,12 +31,16 @@ const Register = () => {
 
       const photoURL = imgRes.data.data.url;
 
+      // 3️⃣ Update Firebase profile
       await updateUserProfile({
         displayName: data.name,
         photoURL,
       });
 
-      // save user in DB
+      // ✅ IMPORTANT: Force Firebase token refresh
+      await auth.currentUser.getIdToken(true);
+
+      // 4️⃣ Save user in database
       await axiosSecure.post("/users", {
         name: data.name,
         email: data.email,
@@ -42,9 +48,10 @@ const Register = () => {
         role: "user",
       });
 
+      // 5️⃣ Redirect
       navigate(location.state || "/");
     } catch (err) {
-      console.error(err);
+      console.error("Register error:", err);
     }
   };
 
@@ -53,24 +60,43 @@ const Register = () => {
       <h2 className="text-2xl font-bold mb-4 text-center">Register</h2>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-        <input {...register("name")} placeholder="Name" className="input w-full" />
-        <input {...register("photo")} type="file" className="file-input w-full" />
-        <input {...register("email")} type="email" placeholder="Email" className="input w-full" />
+        <input
+          {...register("name", { required: true })}
+          placeholder="Name"
+          className="input input-bordered w-full"
+        />
+
+        <input
+          {...register("photo", { required: true })}
+          type="file"
+          className="file-input file-input-bordered w-full"
+        />
+
+        <input
+          {...register("email", { required: true })}
+          type="email"
+          placeholder="Email"
+          className="input input-bordered w-full"
+        />
 
         <div className="relative">
           <input
-            {...register("password")}
+            {...register("password", { required: true, minLength: 6 })}
             type={showPassword ? "text" : "password"}
             placeholder="Password"
-            className="input w-full pr-10"
+            className="input input-bordered w-full pr-10"
           />
-          <button type="button" onClick={() => setShowPassword(!showPassword)}
-            className="absolute right-3 top-1/2 -translate-y-1/2">
+
+          <button
+            type="button"
+            onClick={() => setShowPassword(!showPassword)}
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-xl"
+          >
             {showPassword ? <FiEye /> : <FiEyeOff />}
           </button>
         </div>
 
-        <button className="btn w-full">Register</button>
+        <button className="btn btn-neutral w-full">Register</button>
       </form>
 
       <SocialLogin />
