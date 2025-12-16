@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { AuthContext } from "./AuthContext";
 import { auth } from "../Firebase/Firebase.config";
 import {
@@ -43,24 +43,24 @@ const AuthProvider = ({ children }) => {
     setLoading(true);
     return signOut(auth);
   };
-  
 
   useEffect(() => {
-    const unSubscribe = onAuthStateChanged(auth, (currentUser) => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
       setLoading(false);
     });
-    return () => unSubscribe();
+
+    return () => unsubscribe();
   }, []);
 
   const authInfo = {
-    userRegister,
-    signInUser,
-    signOutUser,
-    signInWithGoogle,
-    updateUserProfile,
     user,
     loading,
+    userRegister,
+    signInUser,
+    signInWithGoogle,
+    signOutUser,
+    updateUserProfile,
   };
 
   return (

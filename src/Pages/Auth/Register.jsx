@@ -95,6 +95,7 @@ const Register = () => {
 
         <button className="btn btn-neutral w-full">Register</button>
       </form>
+      
 
       <p className="text-center mt-4">
         Already have an account?{" "}
