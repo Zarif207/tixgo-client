@@ -1,92 +1,154 @@
 import React from "react";
-import { NavLink, Link } from "react-router";
-import { FaBus } from "react-icons/fa";
+import { NavLink, Link, useNavigate } from "react-router";
+import { FaPlaneDeparture } from "react-icons/fa";
 import { FiSun, FiMoon } from "react-icons/fi";
 import UseAuth from "../../Hooks/UseAuth";
 import useTheme from "../../Hooks/UseTheme";
 
-
 const Navbar = () => {
   const { user, signOutUser } = UseAuth();
   const { theme, toggleTheme } = useTheme();
+  const navigate = useNavigate();
 
   const handleLogout = () => {
-    signOutUser().catch(console.error);
+    signOutUser().then(() => navigate("/"));
   };
 
-  const navLinks = (
-    <>
-      <li>
-        <NavLink to="/">Home</NavLink>
-      </li>
+  const handleProtectedNav = (e) => {
+    if (!user) {
+      e.preventDefault();
+      navigate("/auth/login");
+    }
+  };
 
-      {user && (
-        <>
-          <li>
-            <NavLink to="/all-tickets">All Tickets</NavLink>
-          </li>
-          <li>
-            <NavLink to="/dashboard">Dashboard</NavLink>
-          </li>
-        </>
-      )}
-    </>
-  );
+  const baseLink =
+    "px-4 py-2 rounded-lg transition-all duration-200 hover:bg-primary/10";
+  const activeLink = "bg-primary/20 text-primary font-semibold";
+
+  const navItemClass = ({ isActive }) =>
+    `${baseLink} ${isActive ? activeLink : ""}`;
 
   return (
-    <div className="navbar bg-base-100 shadow-sm px-4 lg:px-8 sticky top-0 z-50">
+    <div className="navbar sticky top-0 z-50 backdrop-blur-md bg-base-100/80 shadow-sm px-4 lg:px-10">
       {/* LEFT */}
       <div className="navbar-start">
+        {/* MOBILE */}
         <div className="dropdown lg:hidden">
-          <label tabIndex={0} className="btn btn-ghost">
+          <label tabIndex={0} className="btn btn-ghost text-xl">
             ☰
           </label>
           <ul
             tabIndex={0}
             className="menu menu-sm dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52"
           >
-            {navLinks}
+            <li>
+              <NavLink to="/" className={navItemClass}>
+                Home
+              </NavLink>
+            </li>
+
+            <li>
+              <NavLink
+                to="/all-tickets"
+                onClick={(e) => handleProtectedNav(e)}
+                className={navItemClass}
+              >
+                All Tickets
+              </NavLink>
+            </li>
+
+            <li>
+              <NavLink
+                to="/dashboard"
+                onClick={(e) => handleProtectedNav(e)}
+                className={navItemClass}
+              >
+                Dashboard
+              </NavLink>
+            </li>
           </ul>
         </div>
 
-        <Link to="/" className="flex items-center gap-2 text-xl font-bold">
-          <FaBus className="text-primary" />
+        {/* LOGO */}
+        <Link to="/" className="flex items-center gap-2 text-2xl font-bold">
+          <FaPlaneDeparture className="text-primary" />
           TixGo
         </Link>
       </div>
 
-      {/* CENTER */}
+      {/* CENTER (DESKTOP) */}
       <div className="navbar-center hidden lg:flex">
-        <ul className="menu menu-horizontal gap-2">{navLinks}</ul>
+        <ul className="menu menu-horizontal gap-2">
+          <li>
+            <NavLink to="/" className={navItemClass}>
+              Home
+            </NavLink>
+          </li>
+
+          <li>
+            <NavLink
+              to="/all-tickets"
+              onClick={(e) => handleProtectedNav(e)}
+              className={navItemClass}
+            >
+              All Tickets
+            </NavLink>
+          </li>
+
+          <li>
+            <NavLink
+              to="/dashboard"
+              onClick={(e) => handleProtectedNav(e)}
+              className={navItemClass}
+            >
+              Dashboard
+            </NavLink>
+          </li>
+        </ul>
       </div>
 
       {/* RIGHT */}
-      <div className="navbar-end flex items-center gap-3">
-        {/* 🌙 THEME TOGGLE */}
-        <button
-          onClick={toggleTheme}
-          className="btn btn-ghost btn-circle"
-          title="Toggle theme"
-        >
-          {theme === "dark" ? (
-            <FiSun className="text-xl" />
-          ) : (
-            <FiMoon className="text-xl" />
-          )}
+      <div className="navbar-end gap-3">
+        {/* THEME */}
+        <button onClick={toggleTheme} className="btn btn-ghost btn-circle">
+          {theme === "dark" ? <FiSun /> : <FiMoon />}
         </button>
 
         {!user ? (
           <>
-            <Link to="/auth/login" className="btn btn-ghost">
+            {/* LOGIN */}
+            <NavLink
+              to="/auth/login"
+              className={({ isActive }) =>
+                `
+      btn rounded-lg transition-all duration-300
+      border border-primary bg-transparent text-primary
+      hover:bg-primary/10
+      ${isActive ? "bg-primary text-primary-content" : ""}
+      `
+              }
+            >
               Login
-            </Link>
-            <Link to="/auth/register" className="btn btn-primary text-black">
+            </NavLink>
+
+            {/* REGISTER */}
+            <NavLink
+              to="/auth/register"
+              className={({ isActive }) =>
+                `
+      btn rounded-lg transition-all duration-300
+      border border-primary bg-transparent text-primary
+      hover:bg-primary/10
+      ${isActive ? "bg-primary text-primary-content" : ""}
+      `
+              }
+            >
               Register
-            </Link>
+            </NavLink>
           </>
         ) : (
           <div className="dropdown dropdown-end">
-            <label tabIndex={0} className="btn btn-ghost flex items-center gap-2">
+            <label tabIndex={0} className="btn btn-ghost flex gap-2">
               <img
                 src={user.photoURL || "https://i.ibb.co/4pDNDk1/avatar.png"}
                 alt="avatar"

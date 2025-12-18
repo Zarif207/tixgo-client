@@ -46,6 +46,7 @@ import RequestedBookings from "../Pages/Dashboard/VendorDashboard/RequestedBooki
 import Revenue from "../Pages/Dashboard/VendorDashboard/Revenue";
 import About from "../Pages/Other/About";
 import ContactUs from "../Pages/Other/ContactUs";
+import ErrorPage from "../Pages/Other/ErrorPage";
 
 // ================== ROUTER ==================
 
@@ -65,12 +66,12 @@ export const router = createBrowserRouter([
       { path: "payment-cancelled", element: <PaymentCancelled /> },
       { path: "payment-failed", element: <PaymentFailed /> },
       {
-        path: 'about',
-        element: <About/>
+        path: "about",
+        element: <About />,
       },
       {
-        path: 'contact-us',
-        element: <ContactUs/>
+        path: "contact-us",
+        element: <ContactUs />,
       },
     ],
   },
@@ -200,5 +201,10 @@ export const router = createBrowserRouter([
         ),
       },
     ],
+  },
+
+  {
+    path: "*",
+    element: <ErrorPage />,
   },
 ]);
