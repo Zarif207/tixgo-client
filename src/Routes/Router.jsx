@@ -44,6 +44,8 @@ import AddTicket from "../Pages/Dashboard/VendorDashboard/AddTicket";
 import MyAddedTickets from "../Pages/Dashboard/VendorDashboard/MyAddedTickets";
 import RequestedBookings from "../Pages/Dashboard/VendorDashboard/RequestedBookings";
 import Revenue from "../Pages/Dashboard/VendorDashboard/Revenue";
+import About from "../Pages/Other/About";
+import ContactUs from "../Pages/Other/ContactUs";
 
 // ================== ROUTER ==================
 
@@ -62,6 +64,14 @@ export const router = createBrowserRouter([
       { path: "payment-success", element: <PaymentSuccess /> },
       { path: "payment-cancelled", element: <PaymentCancelled /> },
       { path: "payment-failed", element: <PaymentFailed /> },
+      {
+        path: 'about',
+        element: <About/>
+      },
+      {
+        path: 'contact-us',
+        element: <ContactUs/>
+      },
     ],
   },
 
