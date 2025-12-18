@@ -1,19 +1,14 @@
 import { useQuery } from "@tanstack/react-query";
+import { FaUser, FaEnvelope } from "react-icons/fa";
 import UseAxiosSecure from "../../../Hooks/UseAxiosSecure";
 import UseAuth from "../../../Hooks/UseAuth";
-
 
 const UserProfile = () => {
   const axiosSecure = UseAxiosSecure();
   const { user } = UseAuth();
-
   const email = user?.email;
 
-  const {
-    data: profile,
-    isLoading,
-    isError,
-  } = useQuery({
+  const { data: profile, isLoading } = useQuery({
     queryKey: ["userProfile", email],
     enabled: !!email,
     queryFn: async () => {
@@ -22,70 +17,49 @@ const UserProfile = () => {
     },
   });
 
-  /* ---------- States ---------- */
-
-  if (!email) {
-    return (
-      <div className="text-center mt-10 text-gray-500">
-        Please log in to view your profile.
-      </div>
-    );
-  }
-
   if (isLoading) {
     return (
-      <div className="text-center mt-10 text-lg font-semibold">
-        Loading profile...
-      </div>
+      <p className="text-center mt-10 text-base-content/60">
+        Loading profile…
+      </p>
     );
   }
-
-  if (isError || !profile) {
-    return (
-      <div className="text-center mt-10 text-red-600">
-        Failed to load profile.
-      </div>
-    );
-  }
-
-  /* ---------- UI ---------- */
 
   return (
-    <div className="max-w-lg mx-auto mt-10 p-6 bg-white shadow rounded-lg">
-      <h2 className="text-2xl font-semibold mb-6 text-center">
-        User Profile
-      </h2>
+    <div className="flex justify-center mt-16">
+      <div
+        className="
+          w-full max-w-md p-8 rounded-2xl
+          bg-base-100 text-base-content
+          border border-base-300
+          shadow-lg
+        "
+      >
+        <h2 className="text-2xl font-bold text-center mb-6">
+          User Profile
+        </h2>
 
-      <div className="flex flex-col items-center">
-        <img
-          src={profile.photo || user?.photoURL || "https://i.pravatar.cc/150"}
-          alt="Profile"
-          className="w-32 h-32 rounded-full border shadow mb-4 object-cover"
-        />
+        <div className="flex flex-col items-center gap-3">
+          <img
+            src={profile?.photo || user?.photoURL || "https://i.pravatar.cc/150"}
+            alt="Profile"
+            className="w-28 h-28 rounded-full border border-base-300"
+          />
 
-        <h3 className="text-xl font-semibold">
-          {profile.name || user?.displayName || "No Name"}
-        </h3>
-
-        <p className="text-gray-600">{profile.email}</p>
-
-        <span
-          className={`mt-3 px-4 py-1 rounded-full text-sm text-white capitalize ${
-            profile.role === "admin"
-              ? "bg-red-600"
-              : profile.role === "vendor"
-              ? "bg-green-600"
-              : "bg-blue-600"
-          }`}
-        >
-          {profile.role}
-        </span>
-
-        {profile.createdAt && (
-          <p className="mt-3 text-sm text-gray-500">
-            Joined: {new Date(profile.createdAt).toLocaleDateString()}
+          <p className="flex items-center gap-2 text-lg font-semibold">
+            <FaUser className="text-primary" />
+            {profile?.name}
           </p>
-        )}
+
+          <p className="flex items-center gap-2 text-base-content/70">
+            <FaEnvelope />
+            {profile?.email}
+          </p>
+
+          <span className="mt-4 px-4 py-1 rounded-full text-sm font-medium text-primary-content bg-primary">
+            {profile?.role}
+          </span>
+        </div>
       </div>
     </div>
   );

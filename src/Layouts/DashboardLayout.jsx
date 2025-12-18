@@ -16,12 +16,10 @@ import {
 } from "react-icons/fa";
 import UseAuth from "../Hooks/UseAuth";
 import UseRole from "../Hooks/UseRole";
-import Navbar from "../Pages/Shared/Navbar";
-
 
 /* ===================== REUSABLE NAV ITEM ===================== */
 const DashboardNavLink = ({ to, icon, label }) => {
-  const Icon = icon; 
+  const Icon = icon;
   return (
     <NavLink
       to={to}
@@ -41,7 +39,6 @@ const DashboardNavLink = ({ to, icon, label }) => {
     </NavLink>
   );
 };
-
 
 /* ===================== LAYOUT ===================== */
 const DashboardLayout = () => {
@@ -69,129 +66,70 @@ const DashboardLayout = () => {
   }
 
   return (
-    <div className="min-h-screen flex bg-base-200">
+    <div className="min-h-screen flex bg-base-200 text-base-content transition-colors">
+      
       {/* ================= SIDEBAR ================= */}
       <aside className="w-72 bg-base-100 border-r border-base-300 p-5 hidden md:flex flex-col">
-        {/* TITLE */}
         <h2 className="text-2xl font-bold mb-6">Dashboard</h2>
 
-        {/* USER INFO */}
         <div className="mb-6 p-4 rounded-lg bg-base-200">
           <p className="font-semibold">{user.displayName || "User"}</p>
           <p className="text-sm text-base-content/60">{user.email}</p>
         </div>
 
-        {/* BACK HOME */}
-        <DashboardNavLink
-          to="/"
-          icon={FaHome}
-          label="Back to Home"
-        />
+        <DashboardNavLink to="/" icon={FaHome} label="Back to Home" />
 
         <div className="divider"></div>
 
-        {/* ================= ADMIN ================= */}
+        {/* ADMIN */}
         {role === "admin" && (
           <div className="space-y-2">
             <p className="text-xs uppercase text-base-content/60 px-2">
               Admin Panel
             </p>
-
-            <DashboardNavLink
-              to="/dashboard/admin/profile"
-              icon={FaUser}
-              label="Profile"
-            />
-
-            <DashboardNavLink
-              to="/dashboard/admin/manage-tickets"
-              icon={FaTicketAlt}
-              label="Manage Tickets"
-            />
-
-            <DashboardNavLink
-              to="/dashboard/admin/manage-users"
-              icon={FaUsers}
-              label="Manage Users"
-            />
-
-            <DashboardNavLink
-              to="/dashboard/admin/advertise-tickets"
-              icon={FaBullhorn}
-              label="Advertise Tickets"
-            />
+            <DashboardNavLink to="/dashboard/admin/profile" icon={FaUser} label="Profile" />
+            <DashboardNavLink to="/dashboard/admin/manage-tickets" icon={FaTicketAlt} label="Manage Tickets" />
+            <DashboardNavLink to="/dashboard/admin/manage-users" icon={FaUsers} label="Manage Users" />
+            <DashboardNavLink to="/dashboard/admin/advertise-tickets" icon={FaBullhorn} label="Advertise Tickets" />
           </div>
         )}
 
-        {/* ================= USER ================= */}
+        {/* USER */}
         {role === "user" && (
           <div className="space-y-2">
             <p className="text-xs uppercase text-base-content/60 px-2">
               User Panel
             </p>
-
-            <DashboardNavLink
-              to="/dashboard/user/profile"
-              icon={FaUser}
-              label="Profile"
-            />
-
-            <DashboardNavLink
-              to="/dashboard/user/my-booked-tickets"
-              icon={FaClipboardList}
-              label="My Bookings"
-            />
-
-            <DashboardNavLink
-              to="/dashboard/user/transactions"
-              icon={FaMoneyBillWave}
-              label="Transactions"
-            />
+            <DashboardNavLink to="/dashboard/user/profile" icon={FaUser} label="Profile" />
+            <DashboardNavLink to="/dashboard/user/my-booked-tickets" icon={FaClipboardList} label="My Bookings" />
+            <DashboardNavLink to="/dashboard/user/transactions" icon={FaMoneyBillWave} label="Transactions" />
           </div>
         )}
 
-        {/* ================= VENDOR ================= */}
+        {/* VENDOR */}
         {role === "vendor" && (
           <div className="space-y-2">
             <p className="text-xs uppercase text-base-content/60 px-2">
               Vendor Panel
             </p>
-
-            <DashboardNavLink
-              to="/dashboard/vendor/profile"
-              icon={FaUser}
-              label="Profile"
-            />
-
-            <DashboardNavLink
-              to="/dashboard/vendor/add-ticket"
-              icon={FaPlusCircle}
-              label="Add Ticket"
-            />
-
-            <DashboardNavLink
-              to="/dashboard/vendor/my-added-tickets"
-              icon={FaTicketAlt}
-              label="My Tickets"
-            />
-
-            <DashboardNavLink
-              to="/dashboard/vendor/requested-bookings"
-              icon={FaClipboardList}
-              label="Requested Bookings"
-            />
-
-            <DashboardNavLink
-              to="/dashboard/vendor/revenue"
-              icon={FaMoneyBillWave}
-              label="Revenue"
-            />
+            <DashboardNavLink to="/dashboard/vendor/profile" icon={FaUser} label="Profile" />
+            <DashboardNavLink to="/dashboard/vendor/add-ticket" icon={FaPlusCircle} label="Add Ticket" />
+            <DashboardNavLink to="/dashboard/vendor/my-added-tickets" icon={FaTicketAlt} label="My Tickets" />
+            <DashboardNavLink to="/dashboard/vendor/requested-bookings" icon={FaClipboardList} label="Requested Bookings" />
+            <DashboardNavLink to="/dashboard/vendor/revenue" icon={FaMoneyBillWave} label="Revenue" />
           </div>
         )}
       </aside>
 
       {/* ================= MAIN CONTENT ================= */}
-      <main className="flex-1 p-4 md:p-6 lg:p-8">
+      <main
+        className="
+          flex-1
+          p-4 md:p-6 lg:p-8
+          bg-base-200
+          transition-colors
+        "
+      >
         <Outlet />
       </main>
     </div>
