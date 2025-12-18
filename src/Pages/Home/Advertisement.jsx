@@ -1,85 +1,120 @@
-// Advertisement.jsx
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
-import UseAxios from "../../Hooks/UseAxios";
 import { useNavigate } from "react-router";
+import UseAxios from "../../Hooks/UseAxios";
+import {
+  FaMoneyBillWave,
+  FaBusAlt,
+  FaCheckCircle,
+} from "react-icons/fa";
 
 const Advertisement = () => {
   const axios = UseAxios();
-
   const navigate = useNavigate();
 
   const { data: ads = [], isLoading } = useQuery({
-    queryKey: ["advertisedTickets"], // FIXED KEY
+    queryKey: ["advertisedTickets"],
     queryFn: async () => {
+      // Backend MUST return exactly 6 admin-selected tickets
       const res = await axios.get("/tickets/advertised?limit=6");
       return res.data;
     },
   });
 
-  if (isLoading) return <p className="p-6">Loading advertisements...</p>;
+  if (isLoading) {
+    return (
+      <div className="flex justify-center py-16">
+        <span className="loading loading-spinner loading-lg"></span>
+      </div>
+    );
+  }
 
   return (
-    <div className="py-10 px-6">
-      <h2 className="text-3xl font-semibold mb-8 text-center">
-        Advertisement Tickets
-      </h2>
+    <section className="py-12 px-4">
+      <div className="max-w-7xl mx-auto">
+        {/* SECTION TITLE */}
+        <h2 className="text-3xl font-bold text-center mb-10">
+          Advertisement Tickets
+        </h2>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-        {ads.map((ticket) => (
-          <div
-            key={ticket._id}
-            className="bg-white shadow rounded-lg overflow-hidden hover:shadow-lg transition"
-          >
-            <img
-              src={ticket.image}
-              alt={ticket.title}
-              className="w-full h-40 object-cover"
-            />
+        {/* GRID */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          {ads.map((ticket) => (
+            <div
+              key={ticket._id}
+              className="bg-base-100 border border-base-300 
+              rounded-xl shadow-md hover:shadow-xl 
+              transition flex flex-col h-full"
+            >
+              {/* IMAGE */}
+              <img
+                src={ticket.image}
+                alt={ticket.title}
+                className="h-48 w-full object-cover rounded-t-xl"
+              />
 
-            <div className="p-4 space-y-2">
-              <h3 className="text-xl font-semibold">{ticket.title}</h3>
+              {/* CONTENT */}
+              <div className="p-5 flex flex-col flex-grow">
+                {/* TITLE */}
+                <h3 className="text-xl font-semibold mb-2">
+                  {ticket.title}
+                </h3>
 
-              <p className="text-gray-700 font-medium">
-                Price:{" "}
-                <span className="text-blue-600 font-bold">${ticket.price}</span>
-              </p>
+                {/* PRICE */}
+                <p className="flex items-center gap-2 font-bold mb-1">
+                  <FaMoneyBillWave className="text-success" />
+                  {ticket.price} BDT / ticket
+                </p>
 
-              <p className="text-gray-700">
-                Quantity:{" "}
-                <span className="font-semibold">{ticket.quantity}</span>
-              </p>
+                {/* QUANTITY */}
+                <p className="text-sm mb-1">
+                  Available Quantity:{" "}
+                  <span className="font-semibold">
+                    {ticket.quantity}
+                  </span>
+                </p>
 
-              <p className="text-gray-700">
-                Transport:{" "}
-                <span className="font-semibold">
-                  {ticket.transport || ticket.type}
-                </span>
-              </p>
+                {/* TRANSPORT */}
+                <p className="flex items-center gap-2 text-sm mb-3">
+                  <FaBusAlt />
+                  {ticket.transport}
+                </p>
 
-              <ul className="text-gray-600 text-sm list-disc ml-6">
-                {(ticket.perks || []).slice(0, 3).map((perk, i) => (
-                  <li key={i}>{perk}</li>
-                ))}
-              </ul>
+                {/* PERKS */}
+                <div className="mb-4 min-h-[72px]">
+                  {(ticket.perks || []).map((perk, i) => (
+                    <p
+                      key={i}
+                      className="text-sm flex items-center gap-2"
+                    >
+                      <FaCheckCircle className="text-primary" />
+                      {perk}
+                    </p>
+                  ))}
+                </div>
 
-              <button
-                onClick={() => navigate(`/ticket-details/${ticket._id}`)}
-                className="w-full py-2.5 rounded-xl border border-blue-600 text-blue-600 font-semibold hover:bg-blue-600 hover:text-white transition-all duration-300"
-              >
-                See Details
-              </button>
+                {/* BUTTON FIXED AT BOTTOM */}
+                <button
+                  onClick={() =>
+                    navigate(`/ticket-details/${ticket._id}`)
+                  }
+                  className="mt-auto btn btn-primary w-full rounded-lg"
+                >
+                  See Details
+                </button>
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
 
+        {/* EMPTY STATE */}
         {ads.length === 0 && (
-          <p className="text-center text-gray-500 col-span-3">
-            No advertised tickets yet.
+          <p className="text-center text-base-content/60 mt-10">
+            No advertised tickets available.
           </p>
         )}
       </div>
-    </div>
+    </section>
   );
 };
 

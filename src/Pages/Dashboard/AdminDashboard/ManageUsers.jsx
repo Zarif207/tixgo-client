@@ -1,22 +1,22 @@
 import React, { useEffect, useState } from "react";
-import Swal from "sweetalert2";
 import UseAxiosSecure from "../../../Hooks/UseAxiosSecure";
+import { themedSwal, confirmAction, successAlert, errorAlert } from "../../../Utils/swal";
 
 const ManageUsers = () => {
   const axiosSecure = UseAxiosSecure();
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // -----------------------------
-  // Fetch users
-  // -----------------------------
+  /* ---------------- Fetch Users ---------------- */
+
   const fetchUsers = async () => {
     try {
       setLoading(true);
       const res = await axiosSecure.get("/admin/users");
       setUsers(res.data);
     } catch (err) {
-      console.error("Fetch users error:", err);
+      console.error("Error fetching users:", err);
+      errorAlert("Failed", "Could not load users");
     } finally {
       setLoading(false);
     }
@@ -26,122 +26,142 @@ const ManageUsers = () => {
     fetchUsers();
   }, []);
 
-  // -----------------------------
-  // Make Admin
-  // -----------------------------
+  /* ---------------- Make Admin ---------------- */
+
   const makeAdmin = async (id) => {
-    await axiosSecure.patch(`/admin/users/${id}/make-admin`);
-    fetchUsers();
-  };
-
-  // -----------------------------
-  // Make Vendor
-  // -----------------------------
-  const makeVendor = async (id) => {
-    await axiosSecure.patch(`/admin/users/${id}/make-vendor`);
-    fetchUsers();
-  };
-
-  // -----------------------------
-  // Mark Vendor as Fraud
-  // -----------------------------
-  const markFraud = async (id) => {
-    const result = await Swal.fire({
-      title: "Mark as Fraud?",
-      text: "This vendor's tickets will be hidden permanently.",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#dc2626",
-      confirmButtonText: "Yes, mark fraud",
+    const res = await confirmAction({
+      title: "Make Admin?",
+      text: "This user will get full admin access.",
+      confirmText: "Yes, make admin",
     });
 
-    if (result.isConfirmed) {
-      await axiosSecure.patch(`/admin/users/${id}/mark-fraud`);
+    if (!res.isConfirmed) return;
+
+    try {
+      await axiosSecure.patch(`/admin/users/${id}/make-admin`);
+      successAlert("Updated", "User promoted to admin");
       fetchUsers();
-      Swal.fire("Done!", "Vendor marked as fraud.", "success");
+    } catch {
+      errorAlert("Error", "Failed to make admin");
     }
   };
 
+  /* ---------------- Make Vendor ---------------- */
+
+  const makeVendor = async (id) => {
+    const res = await confirmAction({
+      title: "Make Vendor?",
+      text: "This user will be able to sell tickets.",
+      confirmText: "Yes, make vendor",
+    });
+
+    if (!res.isConfirmed) return;
+
+    try {
+      await axiosSecure.patch(`/admin/users/${id}/make-vendor`);
+      successAlert("Updated", "User promoted to vendor");
+      fetchUsers();
+    } catch {
+      errorAlert("Error", "Failed to make vendor");
+    }
+  };
+
+  /* ---------------- Mark Fraud ---------------- */
+
+  const markFraud = async (id) => {
+    const res = await themedSwal.fire({
+      icon: "warning",
+      title: "Mark vendor as fraud?",
+      text: "All tickets from this vendor will be hidden permanently.",
+      showCancelButton: true,
+      confirmButtonColor: "#dc2626",
+      confirmButtonText: "Mark Fraud",
+    });
+
+    if (!res.isConfirmed) return;
+
+    try {
+      await axiosSecure.patch(`/admin/users/${id}/mark-fraud`);
+      successAlert("Updated", "Vendor marked as fraud");
+      fetchUsers();
+    } catch {
+      errorAlert("Error", "Failed to mark fraud");
+    }
+  };
+
+  /* ---------------- Loading ---------------- */
+
   if (loading) {
-    return <p className="p-6">Loading users...</p>;
+    return (
+      <div className="flex justify-center items-center min-h-[55vh]">
+        <span className="loading loading-spinner loading-lg"></span>
+      </div>
+    );
   }
 
-  return (
-    <div className="p-6">
-      <h2 className="text-2xl font-semibold mb-6">Manage Users</h2>
+  /* ---------------- UI ---------------- */
 
-      <div className="overflow-x-auto">
-        <table className="min-w-full bg-white rounded-lg shadow">
-          <thead className="bg-gray-100">
+  return (
+    <div className="p-6 bg-base-100 min-h-screen">
+      <h2 className="text-xl font-semibold mb-5">Manage Users</h2>
+
+      <div className="overflow-x-auto rounded-lg border border-base-300">
+        <table className="w-full text-sm">
+          <thead className="bg-base-200 text-base-content">
             <tr>
-              <th className="py-3 px-4 text-left">#</th>
-              <th className="py-3 px-4 text-left">Name</th>
-              <th className="py-3 px-4 text-left">Email</th>
-              <th className="py-3 px-4 text-left">Role</th>
-              <th className="py-3 px-4 text-center">Actions</th>
+              <th className="p-3 text-left">#</th>
+              <th className="p-3 text-left">Name</th>
+              <th className="p-3 text-left">Email</th>
+              <th className="p-3 text-left">Role</th>
+              <th className="p-3 text-center">Actions</th>
             </tr>
           </thead>
 
           <tbody>
-            {users.map((user, index) => (
-              <tr key={user._id} className="border-b hover:bg-gray-50">
-                <td className="py-3 px-4">{index + 1}</td>
-                <td className="py-3 px-4">{user.name || "—"}</td>
-                <td className="py-3 px-4">{user.email}</td>
+            {users.map((user, i) => (
+              <tr
+                key={user._id}
+                className="border-t border-base-300 hover:bg-base-200/40 transition"
+              >
+                <td className="p-3">{i + 1}</td>
+                <td className="p-3">{user.name || "—"}</td>
+                <td className="p-3">{user.email}</td>
 
-                <td className="py-3 px-4 capitalize font-medium">
-                  {user.role}
+                <td className="p-3">
+                  <span className="font-medium capitalize">{user.role}</span>
                   {user.isFraud && (
-                    <span className="ml-2 text-red-600 font-semibold">
-                      (Fraud)
-                    </span>
+                    <span className="ml-2 text-xs text-error">(fraud)</span>
                   )}
                 </td>
 
-                <td className="py-3 px-4 flex gap-2 justify-center flex-wrap">
-                  {/* Make Admin */}
-                  <button
-                    onClick={() => makeAdmin(user._id)}
-                    disabled={user.role === "admin"}
-                    className={`px-3 py-1 rounded text-white
-                      ${
-                        user.role === "admin"
-                          ? "bg-blue-300 cursor-not-allowed"
-                          : "bg-blue-600 hover:bg-blue-700"
-                      }`}
-                  >
-                    Make Admin
-                  </button>
-
-                  {/* Make Vendor */}
-                  <button
-                    onClick={() => makeVendor(user._id)}
-                    disabled={user.role === "vendor"}
-                    className={`px-3 py-1 rounded text-white
-                      ${
-                        user.role === "vendor"
-                          ? "bg-purple-300 cursor-not-allowed"
-                          : "bg-purple-600 hover:bg-purple-700"
-                      }`}
-                  >
-                    Make Vendor
-                  </button>
-
-                  {/* Mark Fraud */}
-                  {user.role === "vendor" && (
+                <td className="p-3">
+                  <div className="flex flex-wrap justify-center gap-2">
                     <button
-                      onClick={() => markFraud(user._id)}
-                      disabled={user.isFraud}
-                      className={`px-3 py-1 rounded text-white
-                        ${
-                          user.isFraud
-                            ? "bg-red-300 cursor-not-allowed"
-                            : "bg-red-600 hover:bg-red-700"
-                        }`}
+                      onClick={() => makeAdmin(user._id)}
+                      disabled={user.role === "admin"}
+                      className="px-3 py-1.5 text-xs rounded border border-base-300 hover:bg-base-200 disabled:opacity-40"
                     >
-                      Mark Fraud
+                      Make Admin
                     </button>
-                  )}
+
+                    <button
+                      onClick={() => makeVendor(user._id)}
+                      disabled={user.role === "vendor"}
+                      className="px-3 py-1.5 text-xs rounded border border-base-300 hover:bg-base-200 disabled:opacity-40"
+                    >
+                      Make Vendor
+                    </button>
+
+                    {user.role === "vendor" && (
+                      <button
+                        onClick={() => markFraud(user._id)}
+                        disabled={user.isFraud}
+                        className="px-3 py-1.5 text-xs rounded text-error border border-error/40 hover:bg-error/10 disabled:opacity-40"
+                      >
+                        Mark Fraud
+                      </button>
+                    )}
+                  </div>
                 </td>
               </tr>
             ))}
@@ -149,7 +169,7 @@ const ManageUsers = () => {
         </table>
 
         {users.length === 0 && (
-          <p className="text-center text-gray-500 py-6">
+          <p className="py-6 text-center text-base-content/60">
             No users found
           </p>
         )}

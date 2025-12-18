@@ -1,49 +1,62 @@
 import React from "react";
 import UseAuth from "../../../Hooks/UseAuth";
+import { FaUserTie, FaEnvelope, FaClock } from "react-icons/fa";
 
 const VendorProfile = () => {
   const { user } = UseAuth();
 
   return (
-    <div className="max-w-lg mx-auto bg-white shadow-md rounded-xl p-6 mt-6">
+    <div className="max-w-xl mx-auto mt-8">
+      <div className="card bg-base-100 shadow-xl p-6">
 
-      <div className="flex flex-col items-center">
-        {/* Profile Image */}
-        <img
-          src={user?.photoURL || "https://i.ibb.co/YyW7q4g/blank-profile-picture.png"}
-          alt="Vendor Avatar"
-          className="w-28 h-28 rounded-full object-cover border"
-        />
+        {/* PROFILE HEADER */}
+        <div className="flex flex-col items-center text-center">
+          <div className="relative">
+            <img
+              src={
+                user?.photoURL ||
+                "https://i.ibb.co/YyW7q4g/blank-profile-picture.png"
+              }
+              alt="Vendor Avatar"
+              className="w-28 h-28 rounded-full object-cover border border-base-300"
+            />
+          </div>
 
-        {/* Name */}
-        <h2 className="text-2xl font-bold mt-4">
-          {user?.displayName || "Unknown Vendor"}
-        </h2>
+          <h2 className="text-2xl font-bold mt-4">
+            {user?.displayName || "Unknown Vendor"}
+          </h2>
 
-        {/* Email */}
-        <p className="text-gray-600 text-sm mt-1">
-          {user?.email || "No email available"}
-        </p>
+          <div className="flex items-center gap-2 mt-1 opacity-80">
+            <FaEnvelope />
+            <span className="text-sm">{user?.email || "No email available"}</span>
+          </div>
 
-        {/* Role */}
-        <span className="mt-2 px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm">
-          Vendor
-        </span>
-      </div>
+          <span className="badge badge-primary mt-3 px-4 py-2">
+            Vendor
+          </span>
+        </div>
 
-      {/* Extra info section */}
-      <div className="mt-6 border-t pt-4">
+        {/* DIVIDER */}
+        <div className="divider my-6"></div>
 
-        <p className="text-gray-700">
-          <span className="font-semibold">Account Created:</span>{" "}
-          {user?.metadata?.creationTime || "N/A"}
-        </p>
+        {/* INFO SECTION */}
+        <div className="space-y-3 text-sm">
+          <div className="flex items-center gap-3">
+            <FaClock className="text-primary" />
+            <p>
+              <span className="font-semibold">Account Created:</span>{" "}
+              {user?.metadata?.creationTime || "N/A"}
+            </p>
+          </div>
 
-        <p className="text-gray-700 mt-2">
-          <span className="font-semibold">Last Login:</span>{" "}
-          {user?.metadata?.lastSignInTime || "N/A"}
-        </p>
-
+          <div className="flex items-center gap-3">
+            <FaClock className="text-primary" />
+            <p>
+              <span className="font-semibold">Last Login:</span>{" "}
+              {user?.metadata?.lastSignInTime || "N/A"}
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   );

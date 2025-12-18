@@ -2,6 +2,11 @@ import React, { useEffect, useState } from "react";
 import UseAxiosSecure from "../../../Hooks/UseAxiosSecure";
 import UseAuth from "../../../Hooks/UseAuth";
 
+const usd = new Intl.NumberFormat("en-US", {
+  style: "currency",
+  currency: "USD",
+});
+
 const MyBookedTickets = () => {
   const axiosSecure = UseAxiosSecure();
   const { user } = UseAuth();
@@ -39,8 +44,7 @@ const MyBookedTickets = () => {
 
       bookedTickets.forEach((ticket) => {
         const depTime = new Date(ticket.departure).getTime();
-        const now = Date.now();
-        const diff = depTime - now;
+        const diff = depTime - Date.now();
 
         if (diff > 0 && ticket.status !== "rejected") {
           const h = Math.floor(diff / (1000 * 60 * 60));
@@ -60,8 +64,10 @@ const MyBookedTickets = () => {
   // Can Pay?
   // ---------------------------
   const canPay = (ticket) => {
-    const depTime = new Date(ticket.departure).getTime();
-    return ticket.status === "accepted" && depTime > Date.now();
+    return (
+      ticket.status === "accepted" &&
+      new Date(ticket.departure) > new Date()
+    );
   };
 
   // ---------------------------
@@ -74,31 +80,40 @@ const MyBookedTickets = () => {
       });
 
       if (res.data?.url) {
-        window.location.assign(res.data.url);
+        window.location.href = res.data.url;
       }
     } catch (err) {
       console.error("Payment error:", err);
+      alert(err.response?.data?.message || "Payment failed");
     }
   };
 
   // ---------------------------
   // UI states
   // ---------------------------
-  if (loading) return <p className="p-6">Loading...</p>;
+  if (loading) {
+    return <p className="p-6">Loading bookings...</p>;
+  }
 
-  if (bookedTickets.length === 0)
+  if (bookedTickets.length === 0) {
     return <p className="p-6 text-gray-500">No bookings found.</p>;
+  }
 
   // ---------------------------
   // UI
   // ---------------------------
   return (
     <div className="p-6">
-      <h2 className="text-2xl font-semibold mb-5">My Booked Tickets</h2>
+      <h2 className="text-2xl font-semibold mb-5">
+        My Booked Tickets
+      </h2>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {bookedTickets.map((ticket) => (
-          <div key={ticket._id} className="bg-white shadow rounded-lg p-5">
+          <div
+            key={ticket._id}
+            className="bg-white shadow rounded-lg p-5"
+          >
             <img
               src={ticket.image}
               alt={ticket.title}
@@ -116,7 +131,11 @@ const MyBookedTickets = () => {
             </p>
 
             <p>Quantity: {ticket.quantity}</p>
-            <p>Total: ${ticket.price * ticket.quantity}</p>
+
+            <p className="font-semibold">
+              Total:{" "}
+              {usd.format(ticket.price * ticket.quantity)}
+            </p>
 
             <span className="inline-block mt-2 px-3 py-1 text-sm rounded-full bg-gray-200">
               {ticket.status}
@@ -124,14 +143,14 @@ const MyBookedTickets = () => {
 
             {timeLeft[ticket._id] && (
               <p className="text-sm mt-2">
-                Countdown: {timeLeft[ticket._id]}
+                ⏳ {timeLeft[ticket._id]}
               </p>
             )}
 
             {canPay(ticket) && (
               <button
                 onClick={() => handlePayNow(ticket)}
-                className="w-full mt-3 bg-green-600 text-white py-2 rounded"
+                className="w-full mt-3 bg-green-600 hover:bg-green-700 text-white py-2 rounded"
               >
                 Pay Now
               </button>

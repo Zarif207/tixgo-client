@@ -1,14 +1,15 @@
-import React from "react";
-import { useNavigate } from "react-router";
-import UseAuth from "../Hooks/UseAuth";
+import { Navigate } from "react-router";
+import UseRole from "../Hooks/UseRole";
 
 const VendorRoute = ({ children }) => {
-  const { user } = UseAuth();
-  const navigate = useNavigate();
+  const { role, roleLoading } = UseRole();
 
-  if (user?.role !== "vendor") {
-    navigate("/");
-    return null;
+  if (roleLoading) {
+    return <span className="loading loading-spinner loading-lg"></span>;
+  }
+
+  if (role !== "vendor") {
+    return <Navigate to="/" replace />;
   }
 
   return children;

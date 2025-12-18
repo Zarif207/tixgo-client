@@ -4,20 +4,24 @@ import UseAuth from "../../../Hooks/UseAuth";
 
 const AdminProfile = () => {
   const axiosSecure = UseAxiosSecure();
-  const { user } = UseAuth();
+  const { user, loading: authLoading } = UseAuth();
 
   const [admin, setAdmin] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
   useEffect(() => {
-    if (!user?.email) return;
+    if (authLoading) return;
+
+    if (!user) {
+      setError("Unauthorized");
+      setLoading(false);
+      return;
+    }
 
     const fetchAdminProfile = async () => {
       try {
-        const res = await axiosSecure.get(
-          `/admin/profile?email=${user.email}`
-        );
+        const res = await axiosSecure.get("/admin/profile");
         setAdmin(res.data);
       } catch (err) {
         console.error("Admin profile error:", err);
@@ -28,52 +32,62 @@ const AdminProfile = () => {
     };
 
     fetchAdminProfile();
-  }, [axiosSecure, user]);
+  }, [axiosSecure, user, authLoading]);
 
+  /* ---------------- LOADING ---------------- */
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-64">
-        <p className="text-gray-500 text-lg">Loading profile...</p>
+      <div className="flex justify-center items-center min-h-[60vh]">
+        <span className="loading loading-spinner loading-lg text-primary"></span>
       </div>
     );
   }
 
+  /* ---------------- ERROR ---------------- */
   if (error) {
     return (
-      <div className="flex justify-center items-center h-64">
-        <p className="text-red-600 font-semibold">{error}</p>
+      <div className="flex justify-center items-center min-h-[60vh]">
+        <p className="text-error font-semibold">{error}</p>
       </div>
     );
   }
 
+  const avatar =
+    admin?.photoURL ||
+    user?.photoURL ||
+    `https://ui-avatars.com/api/?name=${admin?.name || "Admin"}&background=165dfc&color=fff&size=256`;
+
   return (
-    <div className="max-w-md mx-auto bg-white shadow-lg rounded-xl p-6 border mt-10">
+    <div className="max-w-md mx-auto mt-10 bg-base-100 border border-base-300 rounded-2xl shadow-sm p-6">
       <div className="flex flex-col items-center text-center">
+        {/* Avatar */}
         <img
-          src={
-            admin?.photo ||
-            user?.photoURL ||
-            `https://ui-avatars.com/api/?name=${admin?.name || "Admin"}&background=0D8ABC&color=fff&size=256`
-          }
+          src={avatar}
           alt="Admin"
-          className="w-32 h-32 rounded-full shadow-md mb-4 object-cover"
+          className="w-32 h-32 rounded-full object-cover border border-base-300 shadow-sm"
         />
 
-        <h2 className="text-2xl font-semibold">
-          {admin?.name || "Admin"}
+        {/* Name */}
+        <h2 className="text-2xl font-bold mt-4 text-base-content">
+          {admin?.name || user?.displayName || "Admin"}
         </h2>
 
-        <span className="px-4 py-1 mt-2 text-sm font-medium bg-green-100 text-green-600 rounded-full">
+        {/* Role */}
+        <span className="mt-2 px-4 py-1 text-sm font-semibold rounded-full bg-primary/10 text-primary">
           {admin?.role?.toUpperCase()}
         </span>
 
-        <hr className="w-full my-4" />
+        <div className="divider my-4"></div>
 
-        <div className="w-full text-left space-y-2 text-gray-700">
-          <p><strong>Email:</strong> {admin?.email}</p>
-          <p><strong>Phone:</strong> {admin?.phone || "N/A"}</p>
+        {/* Info */}
+        <div className="w-full space-y-2 text-left text-base-content">
           <p>
-            <strong>Joined:</strong>{" "}
+            <span className="font-semibold">Email:</span>{" "}
+            {admin?.email || user?.email}
+          </p>
+
+          <p>
+            <span className="font-semibold">Joined:</span>{" "}
             {admin?.createdAt
               ? new Date(admin.createdAt).toLocaleDateString()
               : "N/A"}

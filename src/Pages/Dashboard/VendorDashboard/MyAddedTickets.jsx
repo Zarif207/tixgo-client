@@ -1,68 +1,64 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import Swal from "sweetalert2";
-import UseAxios from "../../../Hooks/UseAxios";
+import { FaEdit, FaTrash } from "react-icons/fa";
+import UseAxiosSecure from "../../../Hooks/UseAxiosSecure";
 import UseAuth from "../../../Hooks/UseAuth";
+import { themedSwal } from "../../../Utils/swal";
 
 const MyAddedTickets = () => {
-  const axios = UseAxios();
-  const { user, loading } = UseAuth();
+  const axiosSecure = UseAxiosSecure();
+  const { user, loading: authLoading } = UseAuth();
   const email = user?.email;
 
   const [selectedTicket, setSelectedTicket] = useState(null);
   const [formData, setFormData] = useState({});
 
-  /* ---------------- FETCH TICKETS ---------------- */
-
+  /* ---------------- FETCH ---------------- */
   const {
     data: tickets = [],
     isLoading,
     isError,
     refetch,
   } = useQuery({
-    queryKey: ["myTickets", email],
+    queryKey: ["vendorTickets", email],
     enabled: !!email,
     queryFn: async () => {
-      const res = await axios.get(`/tickets/vendor/${email}`);
+      const res = await axiosSecure.get(`/tickets/vendor/${email}`);
       return res.data || [];
     },
   });
 
   /* ---------------- DELETE ---------------- */
-
   const handleDelete = (id) => {
-    Swal.fire({
-      title: "Are you sure?",
+    themedSwal.fire({
+      title: "Delete Ticket?",
       text: "This ticket will be permanently deleted!",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#dc2626",
-      confirmButtonText: "Yes, delete it!",
+      confirmButtonText: "Yes, delete",
     }).then(async (result) => {
-      if (result.isConfirmed) {
-        try {
-          const res = await axios.delete(`/tickets/${id}`);
-          if (res.data?.deletedCount > 0) {
-            Swal.fire("Deleted!", "Ticket has been deleted.", "success");
-            refetch();
-          }
-        } catch (error) {
-          Swal.fire(error, "Failed to delete ticket", "error");
+      if (!result.isConfirmed) return;
+
+      try {
+        const res = await axiosSecure.delete(`/tickets/${id}`);
+        if (res.data?.deletedCount > 0) {
+          themedSwal.fire("Deleted!", "Ticket deleted successfully.", "success");
+          refetch();
         }
+      } catch {
+        themedSwal.fire("Error", "Failed to delete ticket", "error");
       }
     });
   };
 
   /* ---------------- UPDATE ---------------- */
-
   const openUpdateModal = (ticket) => {
     setSelectedTicket(ticket);
-
     setFormData({
-      title: ticket.title || "",
-      price: ticket.price || "",
-      quantity: ticket.quantity || "",
-      image: ticket.image || "",
+      title: ticket.title,
+      price: ticket.price,
+      quantity: ticket.quantity,
+      image: ticket.image,
       departure: ticket.departure
         ? new Date(ticket.departure).toISOString().slice(0, 16)
         : "",
@@ -75,129 +71,122 @@ const MyAddedTickets = () => {
   };
 
   const handleChange = (e) => {
-    setFormData((prev) => ({
-      ...prev,
-      [e.target.name]: e.target.value,
-    }));
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleUpdateSubmit = async (e) => {
     e.preventDefault();
-
     try {
-      const res = await axios.patch(
+      const res = await axiosSecure.patch(
         `/tickets/${selectedTicket._id}`,
         formData
       );
 
       if (res.data?.success) {
-        Swal.fire("Updated!", "Ticket updated successfully.", "success");
+        themedSwal.fire("Updated!", "Ticket updated successfully.", "success");
         refetch();
         closeModal();
-      } else {
-        Swal.fire("Failed", "Update was not successful", "error");
       }
-    } catch (err) {
-      Swal.fire(
-        "Update Failed",
-        err.response?.data?.message || "Something went wrong",
-        "error"
-      );
+    } catch {
+      themedSwal.fire("Update Failed", "Something went wrong", "error");
     }
   };
 
   /* ---------------- STATES ---------------- */
-
-  if (loading || isLoading) {
+  if (authLoading || isLoading) {
     return (
-      <div className="p-6 text-center text-lg font-semibold text-gray-600">
-        Loading your tickets...
+      <div className="flex justify-center items-center min-h-[60vh]">
+        <span className="loading loading-spinner loading-lg"></span>
       </div>
     );
   }
 
   if (isError) {
-    return (
-      <div className="p-6 text-center text-red-600 font-semibold">
-        Failed to load tickets.
-      </div>
-    );
+    return <p className="p-6 text-center text-error">Failed to load tickets</p>;
   }
 
   if (!tickets.length) {
-    return (
-      <div className="p-6 text-center text-gray-500 font-medium">
-        You haven't added any tickets yet.
-      </div>
-    );
+    return <p className="p-6 text-center opacity-70">No tickets found</p>;
   }
 
   /* ---------------- UI ---------------- */
-
   return (
-    <div className="p-6">
+    <div className="p-4 md:p-6">
       <h2 className="text-3xl font-bold mb-6">My Added Tickets</h2>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
         {tickets.map((ticket) => {
           const isRejected = ticket.verificationStatus === "rejected";
 
           return (
             <div
               key={ticket._id}
-              className="bg-white border rounded-xl shadow p-4"
+              className="card bg-base-100 shadow-md hover:shadow-lg transition"
             >
-              <img
-                src={ticket.image || "https://via.placeholder.com/400x200"}
-                alt={ticket.title}
-                className="h-40 w-full object-cover rounded-lg"
-              />
+              <figure className="h-40">
+                <img
+                  src={ticket.image}
+                  alt={ticket.title}
+                  className="h-full w-full object-cover"
+                />
+              </figure>
 
-              <h3 className="text-xl font-semibold mt-3">{ticket.title}</h3>
+              <div className="card-body flex flex-col">
+                <h3 className="text-lg font-semibold line-clamp-2">
+                  {ticket.title}
+                </h3>
 
-              <p className="text-sm mt-1">
-                Price: <strong>${ticket.price}</strong>
-              </p>
-
-              <p className="mt-2">
-                Status:{" "}
+                {/* STATUS BADGE */}
                 <span
-                  className={`px-2 py-1 rounded text-white text-sm capitalize ${
-                    ticket.verificationStatus === "approved"
-                      ? "bg-green-600"
-                      : ticket.verificationStatus === "rejected"
-                      ? "bg-red-600"
-                      : "bg-yellow-500"
-                  }`}
+                  className={`w-fit px-3 py-1 rounded-full text-xs font-medium mt-1
+                    ${
+                      ticket.verificationStatus === "approved"
+                        ? "bg-green-100 text-green-700"
+                        : ticket.verificationStatus === "rejected"
+                        ? "bg-red-100 text-red-700"
+                        : "bg-yellow-100 text-yellow-700"
+                    }`}
                 >
-                  {ticket.verificationStatus}
+                  {ticket.verificationStatus || "pending"}
                 </span>
-              </p>
 
-              <div className="flex justify-between mt-4">
-                <button
-                  disabled={isRejected}
-                  onClick={() => openUpdateModal(ticket)}
-                  className={`px-4 py-2 rounded text-white ${
-                    isRejected
-                      ? "bg-gray-400 cursor-not-allowed"
-                      : "bg-blue-600 hover:bg-blue-700"
-                  }`}
-                >
-                  Update
-                </button>
+                <p className="text-sm opacity-80 mt-2">
+                  Price: <span className="font-medium">${ticket.price}</span>
+                </p>
 
-                <button
-                  disabled={isRejected}
-                  onClick={() => handleDelete(ticket._id)}
-                  className={`px-4 py-2 rounded text-white ${
-                    isRejected
-                      ? "bg-gray-400 cursor-not-allowed"
-                      : "bg-red-600 hover:bg-red-700"
-                  }`}
-                >
-                  Delete
-                </button>
+                <p className="text-sm opacity-80">
+                  Quantity:{" "}
+                  <span className="font-medium">{ticket.quantity}</span>
+                </p>
+
+                <div className="mt-auto flex justify-between gap-2 pt-4">
+                  <button
+                    onClick={() => openUpdateModal(ticket)}
+                    disabled={isRejected}
+                    className={`btn btn-sm text-white ${
+                      isRejected
+                        ? "opacity-40 cursor-not-allowed"
+                        : ""
+                    }`}
+                    style={{ backgroundColor: "#165dfc" }}
+                  >
+                    <FaEdit className="mr-1" />
+                    Update
+                  </button>
+
+                  <button
+                    onClick={() => handleDelete(ticket._id)}
+                    disabled={isRejected}
+                    className={`btn btn-sm btn-error text-white ${
+                      isRejected
+                        ? "opacity-40 cursor-not-allowed"
+                        : ""
+                    }`}
+                  >
+                    <FaTrash className="mr-1" />
+                    Delete
+                  </button>
+                </div>
               </div>
             </div>
           );
@@ -205,70 +194,58 @@ const MyAddedTickets = () => {
       </div>
 
       {/* ---------------- UPDATE MODAL ---------------- */}
-
       {selectedTicket && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-xl w-full max-w-lg p-6">
-            <h3 className="text-2xl font-bold mb-4">Update Ticket</h3>
+        <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center px-4">
+          <div className="bg-base-100 rounded-xl shadow-lg w-full max-w-lg p-6">
+            <h3 className="text-xl font-bold mb-4">Update Ticket</h3>
 
-            <form onSubmit={handleUpdateSubmit} className="space-y-4">
+            <form onSubmit={handleUpdateSubmit} className="space-y-3">
               <input
                 name="title"
                 value={formData.title}
                 onChange={handleChange}
-                className="w-full border p-2 rounded"
+                className="input input-bordered w-full"
                 placeholder="Title"
-                required
               />
 
               <input
-                type="number"
                 name="price"
+                type="number"
                 value={formData.price}
                 onChange={handleChange}
-                className="w-full border p-2 rounded"
+                className="input input-bordered w-full"
                 placeholder="Price"
-                required
               />
 
               <input
-                type="number"
                 name="quantity"
+                type="number"
                 value={formData.quantity}
                 onChange={handleChange}
-                className="w-full border p-2 rounded"
+                className="input input-bordered w-full"
                 placeholder="Quantity"
-                required
               />
 
               <input
                 name="image"
                 value={formData.image}
                 onChange={handleChange}
-                className="w-full border p-2 rounded"
+                className="input input-bordered w-full"
                 placeholder="Image URL"
               />
 
-              <input
-                type="datetime-local"
-                name="departure"
-                value={formData.departure}
-                onChange={handleChange}
-                className="w-full border p-2 rounded"
-              />
-
-              <div className="flex justify-end gap-3 pt-4">
+              <div className="flex justify-end gap-2 pt-4">
                 <button
                   type="button"
                   onClick={closeModal}
-                  className="px-4 py-2 border rounded"
+                  className="btn btn-outline"
                 >
                   Cancel
                 </button>
-
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-blue-600 text-white rounded"
+                  className="btn text-white"
+                  style={{ backgroundColor: "#165dfc" }}
                 >
                   Save Changes
                 </button>

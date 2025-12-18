@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import UseAxiosSecure from "../../Hooks/UseAxiosSecure";
 import UseAuth from "../../Hooks/UseAuth";
+import Swal from "sweetalert2";
 
 const TicketDetails = () => {
   const { id } = useParams();
@@ -63,13 +64,19 @@ const TicketDetails = () => {
     e.preventDefault();
 
     if (!user?.email) {
-      alert("Please login to book ticket");
-      return;
+      return Swal.fire({
+        icon: "info",
+        title: "Login Required",
+        text: "Please login to book this ticket",
+      });
     }
 
     if (bookQty < 1 || bookQty > ticket.quantity) {
-      alert("Invalid booking quantity");
-      return;
+      return Swal.fire({
+        icon: "warning",
+        title: "Invalid Quantity",
+        text: "Please select a valid booking quantity",
+      });
     }
 
     try {
@@ -82,13 +89,24 @@ const TicketDetails = () => {
       const res = await axiosSecure.post("/bookings", bookingData);
 
       if (res.data?.success) {
-        alert("Booking successful!");
+        document.getElementById("book_modal").close();
+        Swal.fire({
+          icon: "success",
+          title: "Booking Confirmed 🎉",
+          text: "Your ticket has been booked successfully!",
+          confirmButtonText: "OK",
+        });
+
         setBookQty(1);
         fetchTicket();
         document.getElementById("book_modal").close();
       }
     } catch (err) {
-      alert(err.response?.data?.message || "Booking failed");
+      Swal.fire({
+        icon: "error",
+        title: "Booking Failed",
+        text: err.response?.data?.message || "Something went wrong",
+      });
     }
   };
 
@@ -152,9 +170,7 @@ const TicketDetails = () => {
 
           <button
             disabled={isButtonDisabled}
-            onClick={() =>
-              document.getElementById("book_modal").showModal()
-            }
+            onClick={() => document.getElementById("book_modal").showModal()}
             className={`w-full py-3 rounded-lg text-white font-semibold 
               ${
                 isButtonDisabled
@@ -194,9 +210,7 @@ const TicketDetails = () => {
               <button
                 type="button"
                 className="btn"
-                onClick={() =>
-                  document.getElementById("book_modal").close()
-                }
+                onClick={() => document.getElementById("book_modal").close()}
               >
                 Cancel
               </button>

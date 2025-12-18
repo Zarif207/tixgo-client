@@ -17,8 +17,8 @@ const UseRole = () => {
 
     axiosSecure
       .get(`/users/role?email=${user.email}`)
-      .then((res) => {
-        setRole(res.data.role); 
+      .then(res => {
+        setRole(res.data.role);
         setRoleLoading(false);
       })
       .catch(() => {

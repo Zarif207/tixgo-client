@@ -1,5 +1,10 @@
-import React from "react";
 import { createBrowserRouter } from "react-router";
+
+// ================== ROUTE GUARDS ==================
+import PrivateRoute from "../Routes/PrivateRoute";
+import AdminRoute from "../Routes/AdminRoute";
+import VendorRoute from "../Routes/VendorRoute";
+import UserRoute from "../Routes/UserRoute";
 
 // ================== LAYOUTS ==================
 import RootLayout from "../Layouts/RootLayout";
@@ -17,23 +22,23 @@ import TicketDetails from "../Pages/Other/TicketDetails";
 import Login from "../Pages/Auth/Login";
 import Register from "../Pages/Auth/Register";
 
-// ----- Payments (GLOBAL) -----
+// ----- Payments -----
 import PaymentSuccess from "../Pages/Payments/PaymentSuccess";
 import PaymentCancelled from "../Pages/Payments/PaymentCancelled";
 import PaymentFailed from "../Pages/Payments/PaymentFailed";
 
-// ----- Admin Dashboard -----
+// ----- Admin -----
 import AdminProfile from "../Pages/Dashboard/AdminDashboard/AdminProfile";
 import ManageTickets from "../Pages/Dashboard/AdminDashboard/ManageTickets";
 import ManageUsers from "../Pages/Dashboard/AdminDashboard/ManageUsers";
 import AdvertiseTickets from "../Pages/Dashboard/AdminDashboard/AdvertiseTickets";
 
-// ----- User Dashboard -----
+// ----- User -----
 import UserProfile from "../Pages/Dashboard/UserDashBoard/UserProfile";
 import MyBookedTickets from "../Pages/Dashboard/UserDashBoard/MyBookedTickets";
 import Transaction from "../Pages/Dashboard/UserDashBoard/Transaction";
 
-// ----- Vendor Dashboard -----
+// ----- Vendor -----
 import VendorProfile from "../Pages/Dashboard/VendorDashboard/VendorProfile";
 import AddTicket from "../Pages/Dashboard/VendorDashboard/AddTicket";
 import MyAddedTickets from "../Pages/Dashboard/VendorDashboard/MyAddedTickets";
@@ -44,38 +49,19 @@ import Revenue from "../Pages/Dashboard/VendorDashboard/Revenue";
 
 export const router = createBrowserRouter([
   // -------------------------------------------------
-  // ROOT (PUBLIC + PAYMENT)
+  // PUBLIC ROUTES
   // -------------------------------------------------
   {
     path: "/",
     element: <RootLayout />,
     children: [
-      {
-        index: true,
-        element: <Home />,
-      },
-      {
-        path: "all-tickets",
-        element: <AllTickets />,
-      },
-      {
-        path: "ticket-details/:id",
-        element: <TicketDetails />,
-      },
+      { index: true, element: <Home /> },
+      { path: "all-tickets", element: <AllTickets /> },
+      { path: "ticket-details/:id", element: <TicketDetails /> },
 
-      // ✅ PAYMENT ROUTES (STRIPE REDIRECTS HERE)
-      {
-        path: "payment-success",
-        element: <PaymentSuccess />,
-      },
-      {
-        path: "payment-cancelled",
-        element: <PaymentCancelled />,
-      },
-      {
-        path: "payment-failed",
-        element: <PaymentFailed />,
-      },
+      { path: "payment-success", element: <PaymentSuccess /> },
+      { path: "payment-cancelled", element: <PaymentCancelled /> },
+      { path: "payment-failed", element: <PaymentFailed /> },
     ],
   },
 
@@ -86,76 +72,122 @@ export const router = createBrowserRouter([
     path: "/auth",
     element: <AuthLayout />,
     children: [
-      {
-        path: "login",
-        element: <Login />,
-      },
-      {
-        path: "register",
-        element: <Register />,
-      },
+      { path: "login", element: <Login /> },
+      { path: "register", element: <Register /> },
     ],
   },
 
   // -------------------------------------------------
-  // DASHBOARD ROUTES
+  // DASHBOARD (PROTECTED)
   // -------------------------------------------------
   {
     path: "/dashboard",
-    element: <DashboardLayout />,
+    element: (
+      <PrivateRoute>
+        <DashboardLayout />
+      </PrivateRoute>
+    ),
     children: [
       // ===== ADMIN =====
       {
         path: "admin/profile",
-        element: <AdminProfile />,
+        element: (
+          <AdminRoute>
+            <AdminProfile />
+          </AdminRoute>
+        ),
       },
       {
         path: "admin/manage-tickets",
-        element: <ManageTickets />,
+        element: (
+          <AdminRoute>
+            <ManageTickets />
+          </AdminRoute>
+        ),
       },
       {
         path: "admin/manage-users",
-        element: <ManageUsers />,
+        element: (
+          <AdminRoute>
+            <ManageUsers />
+          </AdminRoute>
+        ),
       },
       {
         path: "admin/advertise-tickets",
-        element: <AdvertiseTickets />,
+        element: (
+          <AdminRoute>
+            <AdvertiseTickets />
+          </AdminRoute>
+        ),
       },
 
       // ===== USER =====
       {
         path: "user/profile",
-        element: <UserProfile />,
+        element: (
+          <UserRoute>
+            <UserProfile />
+          </UserRoute>
+        ),
       },
       {
         path: "user/my-booked-tickets",
-        element: <MyBookedTickets />,
+        element: (
+          <UserRoute>
+            <MyBookedTickets />
+          </UserRoute>
+        ),
       },
       {
         path: "user/transactions",
-        element: <Transaction />,
+        element: (
+          <UserRoute>
+            <Transaction />
+          </UserRoute>
+        ),
       },
 
       // ===== VENDOR =====
       {
         path: "vendor/profile",
-        element: <VendorProfile />,
+        element: (
+          <VendorRoute>
+            <VendorProfile />
+          </VendorRoute>
+        ),
       },
       {
         path: "vendor/add-ticket",
-        element: <AddTicket />,
+        element: (
+          <VendorRoute>
+            <AddTicket />
+          </VendorRoute>
+        ),
       },
       {
         path: "vendor/my-added-tickets",
-        element: <MyAddedTickets />,
+        element: (
+          <VendorRoute>
+            <MyAddedTickets />
+          </VendorRoute>
+        ),
       },
       {
         path: "vendor/requested-bookings",
-        element: <RequestedBookings />,
+        element: (
+          <VendorRoute>
+            <RequestedBookings />
+          </VendorRoute>
+        ),
       },
       {
         path: "vendor/revenue",
-        element: <Revenue />,
+        element: (
+          <VendorRoute>
+            <Revenue />
+          </VendorRoute>
+        ),
       },
     ],
   },
