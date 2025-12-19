@@ -161,7 +161,7 @@ const AllTickets = () => {
 
                 <p className="font-semibold mb-4 flex items-center gap-2">
                   <FaMoneyBillWave />
-                  {ticket.price} BDT / ticket
+                  {ticket.price} USD / ticket
                 </p>
 
                 {/* BUTTON ALWAYS BOTTOM */}

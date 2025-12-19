@@ -110,7 +110,7 @@ const RequestedBookings = () => {
 
   /* ---------------- UI ---------------- */
   return (
-    <div className="p-4 md:p-6">
+    <div className="p-4 md:p-6 h-[calc(100vh-120px)] overflow-y-auto scroll-smooth">
       <h2 className="text-3xl font-bold mb-6">Requested Bookings</h2>
 
       <div className="overflow-x-auto rounded-xl shadow bg-base-100">

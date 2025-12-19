@@ -28,8 +28,8 @@ const Transaction = () => {
   /* ================= UI STATES ================= */
   if (loading) {
     return (
-      <div className="p-6 text-center text-base-content/60">
-        Loading transactions…
+      <div className="flex justify-center items-center min-h-screen">
+        <span className="loading loading-spinner loading-lg"></span>
       </div>
     );
   }
@@ -77,17 +77,13 @@ const Transaction = () => {
                 key={t.transactionId}
                 className="border-b border-base-300 hover:bg-base-200 transition"
               >
-                <td className="py-3 px-4 text-base-content">
-                  {index + 1}
-                </td>
+                <td className="py-3 px-4 text-base-content">{index + 1}</td>
 
                 <td className="py-3 px-4 font-mono text-sm text-base-content/70 break-all">
                   {t.transactionId}
                 </td>
 
-                <td className="py-3 px-4 text-base-content">
-                  {t.ticketTitle}
-                </td>
+                <td className="py-3 px-4 text-base-content">{t.ticketTitle}</td>
 
                 <td className="py-3 px-4 font-semibold text-success">
                   {usd.format(t.amount)}

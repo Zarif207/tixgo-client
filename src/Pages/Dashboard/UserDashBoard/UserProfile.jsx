@@ -22,9 +22,9 @@ const UserProfile = () => {
 
   if (isLoading) {
     return (
-      <p className="text-center mt-10 text-base-content/60">
-        Loading profile…
-      </p>
+     <div className="flex justify-center items-center min-h-screen">
+        <span className="loading loading-spinner loading-lg"></span>
+      </div>
     );
   }
 

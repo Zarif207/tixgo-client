@@ -43,8 +43,7 @@ const MyBookedTickets = () => {
   }, [bookedTickets]);
 
   const canPay = (ticket) =>
-    ticket.status === "accepted" &&
-    new Date(ticket.departure) > new Date();
+    ticket.status === "accepted" && new Date(ticket.departure) > new Date();
 
   const statusBadge = (status) => {
     switch (status) {
@@ -60,7 +59,11 @@ const MyBookedTickets = () => {
   };
 
   if (loading) {
-    return <div className="p-6 text-center">Loading your bookings…</div>;
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <span className="loading loading-spinner loading-lg"></span>
+      </div>
+    );
   }
 
   if (bookedTickets.length === 0) {

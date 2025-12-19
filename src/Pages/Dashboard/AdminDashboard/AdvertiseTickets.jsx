@@ -118,7 +118,7 @@ const AdvertiseTickets = () => {
                   <td className="p-3">
                     {ticket.transport || ticket.category || "—"}
                   </td>
-                  <td className="p-3">৳{ticket.price ?? "—"}</td>
+                  <td className="p-3">${ticket.price ?? "—"}</td>
 
                   <td className="p-3">
                     <span

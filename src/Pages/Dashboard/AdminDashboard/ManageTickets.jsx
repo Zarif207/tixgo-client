@@ -110,7 +110,7 @@ const ManageTickets = () => {
                   <td className="py-3 px-4">{index + 1}</td>
                   <td className="py-3 px-4">{ticket.title}</td>
                   <td className="py-3 px-4">{ticket.vendorName}</td>
-                  <td className="py-3 px-4">৳{ticket.price}</td>
+                  <td className="py-3 px-4">${ticket.price}</td>
 
                   <td className="py-3 px-4 capitalize">
                     <span className="px-3 py-1 rounded-full text-sm bg-warning/10 text-warning">
