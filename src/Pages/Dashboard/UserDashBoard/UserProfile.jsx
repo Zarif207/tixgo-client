@@ -6,13 +6,16 @@ import UseAuth from "../../../Hooks/UseAuth";
 const UserProfile = () => {
   const axiosSecure = UseAxiosSecure();
   const { user } = UseAuth();
-  const email = user?.email;
 
-  const { data: profile, isLoading } = useQuery({
-    queryKey: ["userProfile", email],
-    enabled: !!email,
+  const {
+    data: profile,
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ["userProfile"],
+    enabled: !!user, // wait until auth is ready
     queryFn: async () => {
-      const res = await axiosSecure.get(`/users/${email}`);
+      const res = await axiosSecure.get("/users/profile");
       return res.data;
     },
   });
@@ -25,8 +28,16 @@ const UserProfile = () => {
     );
   }
 
+  if (isError) {
+    return (
+      <p className="text-center mt-10 text-error">
+        Failed to load profile
+      </p>
+    );
+  }
+
   return (
-    <div className="flex justify-center mt-16">
+    <div className="flex justify-center mt-16 px-4">
       <div
         className="
           w-full max-w-md p-8 rounded-2xl
@@ -41,14 +52,18 @@ const UserProfile = () => {
 
         <div className="flex flex-col items-center gap-3">
           <img
-            src={profile?.photo || user?.photoURL || "https://i.pravatar.cc/150"}
+            src={
+              profile?.photo ||
+              user?.photoURL ||
+              "https://i.pravatar.cc/150"
+            }
             alt="Profile"
-            className="w-28 h-28 rounded-full border border-base-300"
+            className="w-28 h-28 rounded-full border border-base-300 object-cover"
           />
 
           <p className="flex items-center gap-2 text-lg font-semibold">
             <FaUser className="text-primary" />
-            {profile?.name}
+            {profile?.name || "Unnamed User"}
           </p>
 
           <p className="flex items-center gap-2 text-base-content/70">

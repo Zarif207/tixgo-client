@@ -4,10 +4,9 @@ import UseAxiosSecure from "../../../Hooks/UseAxiosSecure";
 import UseAuth from "../../../Hooks/UseAuth";
 import { themedSwal } from "../../../Utils/swal";
 
-
 const RequestedBookings = () => {
   const axiosSecure = UseAxiosSecure();
-  const { user, loading } = UseAuth();
+  const { user } = UseAuth();
   const vendorEmail = user?.email;
 
   /* ---------------- FETCH BOOKINGS ---------------- */
@@ -41,7 +40,11 @@ const RequestedBookings = () => {
     try {
       const res = await axiosSecure.patch(`/bookings/${id}/accept`);
       if (res.data.modifiedCount > 0) {
-        themedSwal.fire("Accepted!", "Booking accepted successfully.", "success");
+        themedSwal.fire(
+          "Accepted!",
+          "Booking accepted successfully.",
+          "success"
+        );
         refetch();
       }
     } catch (err) {
@@ -81,10 +84,10 @@ const RequestedBookings = () => {
   };
 
   /* ---------------- STATES ---------------- */
-  if (loading || isLoading) {
+  if (isLoading) {
     return (
-      <div className="p-6 text-center font-medium">
-        Loading booking requests...
+      <div className="flex justify-center py-20">
+        <span className="loading loading-spinner loading-lg"></span>
       </div>
     );
   }
@@ -92,8 +95,7 @@ const RequestedBookings = () => {
   if (isError) {
     return (
       <div className="p-6 text-center text-error font-semibold">
-        {error?.response?.data?.message ||
-          "Failed to load booking requests."}
+        {error?.response?.data?.message || "Failed to load booking requests."}
       </div>
     );
   }
@@ -130,9 +132,7 @@ const RequestedBookings = () => {
                 <td>{req.customerEmail}</td>
                 <td className="font-medium">{req.ticketTitle}</td>
                 <td className="text-center">{req.quantity}</td>
-                <td className="text-center">
-                  ${req.unitPrice * req.quantity}
-                </td>
+                <td className="text-center">${req.unitPrice * req.quantity}</td>
 
                 {/* STATUS */}
                 <td className="text-center">

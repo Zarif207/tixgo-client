@@ -1,24 +1,38 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-const TicketCard = () => {
-    return (
-        <div className="border p-4 rounded-md shadow-md w-80">
-            <h2 className="text-xl font-semibold">Ticket Title</h2>
+const TicketCard = ({ ticket }) => {
+  return (
+    <div className="card bg-base-100 shadow-lg border border-base-300 hover:shadow-xl transition">
+      <figure className="h-48">
+        <img
+          src={ticket.image}
+          alt={ticket.title}
+          className="w-full h-full object-cover"
+        />
+      </figure>
 
-            <p className="mt-2 text-gray-600">
-                Short description of the ticket goes here...
-            </p>
+      <div className="card-body">
+        <h2 className="card-title">{ticket.title}</h2>
 
-            <div className="mt-4">
-                <Link to="/ticket-details">
-                    <button className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
-                        Details
-                    </button>
-                </Link>
-            </div>
+        <p className="text-base-content/70">
+          {ticket.from} ➝ {ticket.to}
+        </p>
+
+        <p className="font-semibold">
+          {ticket.price} USD
+        </p>
+
+        <div className="card-actions justify-end mt-2">
+          <Link to={`/tickets/${ticket._id}`}>
+            <button className="btn btn-primary btn-sm">
+              Details
+            </button>
+          </Link>
         </div>
-    );
+      </div>
+    </div>
+  );
 };
 
 export default TicketCard;

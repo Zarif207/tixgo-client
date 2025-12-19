@@ -44,9 +44,12 @@ import AddTicket from "../Pages/Dashboard/VendorDashboard/AddTicket";
 import MyAddedTickets from "../Pages/Dashboard/VendorDashboard/MyAddedTickets";
 import RequestedBookings from "../Pages/Dashboard/VendorDashboard/RequestedBookings";
 import Revenue from "../Pages/Dashboard/VendorDashboard/Revenue";
+
+// ----- Other -----
 import About from "../Pages/Other/About";
 import ContactUs from "../Pages/Other/ContactUs";
 import ErrorPage from "../Pages/Other/ErrorPage";
+import NavProfile from "../Pages/Other/NavProfile";
 
 // ================== ROUTER ==================
 
@@ -58,13 +61,39 @@ export const router = createBrowserRouter([
     path: "/",
     element: <RootLayout />,
     children: [
-      { index: true, element: <Home /> },
-      { path: "all-tickets", element: <AllTickets /> },
-      { path: "ticket-details/:id", element: <TicketDetails /> },
+      {
+        index: true,
+        element: <Home />,
+      },
+      {
+        path: "all-tickets",
+        element: (
+          <PrivateRoute>
+            <AllTickets />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "ticket-details/:id",
+        element: (
+          <PrivateRoute>
+            <TicketDetails />
+          </PrivateRoute>
+        ),
+      },
 
-      { path: "payment-success", element: <PaymentSuccess /> },
-      { path: "payment-cancelled", element: <PaymentCancelled /> },
-      { path: "payment-failed", element: <PaymentFailed /> },
+      {
+        path: "payment-success",
+        element: <PaymentSuccess />,
+      },
+      {
+        path: "payment-cancelled",
+        element: <PaymentCancelled />,
+      },
+      {
+        path: "payment-failed",
+        element: <PaymentFailed />,
+      },
       {
         path: "about",
         element: <About />,
@@ -73,6 +102,10 @@ export const router = createBrowserRouter([
         path: "contact-us",
         element: <ContactUs />,
       },
+      {
+        path: 'nav-profile',
+        element: <NavProfile/>
+      }
     ],
   },
 

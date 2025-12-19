@@ -1,8 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
+import {
+  FaPlaneDeparture,
+  FaMapMarkerAlt,
+  FaClock,
+  FaTicketAlt,
+} from "react-icons/fa";
 import UseAxiosSecure from "../../Hooks/UseAxiosSecure";
 import UseAuth from "../../Hooks/UseAuth";
-import Swal from "sweetalert2";
+import { successAlert, errorAlert } from "../../Utils/swal";
 
 const TicketDetails = () => {
   const { id } = useParams();
@@ -11,19 +17,18 @@ const TicketDetails = () => {
 
   const [ticket, setTicket] = useState(null);
   const [loading, setLoading] = useState(true);
-
   const [bookQty, setBookQty] = useState(1);
   const [countdown, setCountdown] = useState("");
   const [isExpired, setIsExpired] = useState(false);
 
-  // ================= FETCH TICKET =================
+  // ================= FETCH =================
   const fetchTicket = async () => {
     try {
       const res = await axiosSecure.get(`/tickets/${id}`);
       setTicket(res.data);
-      setLoading(false);
     } catch (err) {
       console.error(err);
+    } finally {
       setLoading(false);
     }
   };
@@ -34,12 +39,12 @@ const TicketDetails = () => {
 
   // ================= COUNTDOWN =================
   useEffect(() => {
-    if (!ticket) return;
+    if (!ticket?.departure) return;
 
     const interval = setInterval(() => {
       const now = new Date();
-      const departureTime = new Date(ticket.departure);
-      const diff = departureTime - now;
+      const departure = new Date(ticket.departure);
+      const diff = departure - now;
 
       if (diff <= 0) {
         setCountdown("Expired");
@@ -48,149 +53,163 @@ const TicketDetails = () => {
         return;
       }
 
-      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
-      const minutes = Math.floor((diff / (1000 * 60)) % 60);
-      const seconds = Math.floor((diff / 1000) % 60);
+      const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
+      const m = Math.floor((diff / (1000 * 60)) % 60);
+      const s = Math.floor((diff / 1000) % 60);
 
-      setCountdown(`${days}d ${hours}h ${minutes}m ${seconds}s`);
+      setCountdown(`${d}d ${h}h ${m}m ${s}s`);
     }, 1000);
 
     return () => clearInterval(interval);
   }, [ticket]);
 
-  // ================= HANDLE BOOKING =================
+  // ================= BOOK =================
   const handleBooking = async (e) => {
     e.preventDefault();
 
     if (!user?.email) {
-      return Swal.fire({
-        icon: "info",
-        title: "Login Required",
-        text: "Please login to book this ticket",
-      });
-    }
-
-    if (bookQty < 1 || bookQty > ticket.quantity) {
-      return Swal.fire({
-        icon: "warning",
-        title: "Invalid Quantity",
-        text: "Please select a valid booking quantity",
-      });
+      return errorAlert("Login Required", "Please login to book this ticket");
     }
 
     try {
-      const bookingData = {
+      const res = await axiosSecure.post("/bookings", {
         ticketId: ticket._id,
-        customerEmail: user.email,
         quantity: bookQty,
-      };
-
-      const res = await axiosSecure.post("/bookings", bookingData);
+        customerEmail: user.email,
+      });
 
       if (res.data?.success) {
-        document.getElementById("book_modal").close();
-        Swal.fire({
-          icon: "success",
-          title: "Booking Confirmed 🎉",
-          text: "Your ticket has been booked successfully!",
-          confirmButtonText: "OK",
-        });
-
-        setBookQty(1);
+        successAlert("Booking Confirmed 🎉", "Your journey is booked!");
         fetchTicket();
+        setBookQty(1);
         document.getElementById("book_modal").close();
       }
     } catch (err) {
-      Swal.fire({
-        icon: "error",
-        title: "Booking Failed",
-        text: err.response?.data?.message || "Something went wrong",
-      });
+      errorAlert(
+        "Booking Failed",
+        err.response?.data?.message || "Something went wrong"
+      );
     }
   };
 
   if (loading) {
     return (
-      <div className="flex justify-center py-20">
+      <div className="flex justify-center py-32">
         <span className="loading loading-spinner loading-lg"></span>
       </div>
     );
   }
 
   if (!ticket) {
-    return <p className="text-center text-red-500">Ticket not found.</p>;
+    return (
+      <p className="text-center text-error font-semibold mt-16">
+        Ticket not found
+      </p>
+    );
   }
 
-  const isButtonDisabled = isExpired || ticket.quantity === 0;
+  const disabled = isExpired || ticket.quantity === 0;
 
   return (
-    <div className="max-w-5xl mx-auto py-10 px-4">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+    <div className="max-w-7xl mx-auto px-4 py-12">
+      {/* HERO */}
+      <div className="relative rounded-3xl overflow-hidden shadow-2xl">
         <img
           src={ticket.image}
           alt={ticket.title}
-          className="w-full h-80 object-cover rounded-xl shadow-lg"
+          className="w-full h-[380px] object-cover"
         />
 
-        <div>
-          <h2 className="text-3xl font-bold mb-2">{ticket.title}</h2>
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"></div>
 
-          <p className="text-gray-600 mb-1">
-            {ticket.from} ➝ {ticket.to}
+        <div className="absolute bottom-6 left-6 right-6 text-white">
+          <span className="badge badge-primary mb-3 capitalize">
+            {ticket.transport}
+          </span>
+
+          <h1 className="text-3xl md:text-4xl font-extrabold">
+            {ticket.title}
+          </h1>
+
+          <p className="flex items-center gap-2 mt-2 text-white/80">
+            <FaMapMarkerAlt />
+            {ticket.from} → {ticket.to}
           </p>
-
-          <p className="text-gray-700 mb-2">
-            Transport Type:{" "}
-            <span className="font-semibold">{ticket.transport}</span>
-          </p>
-
-          <p className="text-lg font-semibold mb-2">
-            Price: {ticket.price} BDT
-          </p>
-
-          <p className="mb-2">
-            Available Quantity:{" "}
-            <span className="font-semibold">{ticket.quantity}</span>
-          </p>
-
-          <p className="text-gray-700 mb-3">
-            Departure:{" "}
-            <span className="font-semibold">
-              {new Date(ticket.departure).toLocaleString()}
-            </span>
-          </p>
-
-          <div className="text-xl font-bold mb-4">
-            Countdown:{" "}
-            <span className={isExpired ? "text-red-600" : "text-green-600"}>
-              {countdown}
-            </span>
-          </div>
-
-          <button
-            disabled={isButtonDisabled}
-            onClick={() => document.getElementById("book_modal").showModal()}
-            className={`w-full py-3 rounded-lg text-white font-semibold 
-              ${
-                isButtonDisabled
-                  ? "bg-gray-400 cursor-not-allowed"
-                  : "bg-blue-600 hover:bg-blue-700"
-              }`}
-          >
-            Book Now
-          </button>
         </div>
       </div>
 
-      {/* ================= DAISYUI MODAL ================= */}
+      {/* CONTENT */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-10">
+        {/* LEFT INFO */}
+        <div className="lg:col-span-2 space-y-6">
+          <div className="grid sm:grid-cols-2 gap-4">
+            <InfoCard
+              icon={<FaPlaneDeparture />}
+              label="Departure"
+              value={new Date(ticket.departure).toLocaleString()}
+            />
+            <InfoCard
+              icon={<FaTicketAlt />}
+              label="Available Seats"
+              value={ticket.quantity}
+            />
+          </div>
+
+          <div className="card bg-base-100 border border-base-300 shadow-md">
+            <div className="card-body">
+              <h3 className="text-xl font-bold flex items-center gap-2">
+                <FaClock className="text-primary" />
+                Countdown
+              </h3>
+
+              <p
+                className={`text-2xl font-bold mt-2 ${
+                  isExpired ? "text-error" : "text-success"
+                }`}
+              >
+                {countdown}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* RIGHT BOOK */}
+        <div className="card bg-base-100 border border-base-300 shadow-xl sticky top-28">
+          <div className="card-body space-y-4">
+            <h3 className="text-xl font-bold">Booking Summary</h3>
+
+            <div className="flex justify-between font-medium">
+              <span>Price</span>
+              <span>{ticket.price} USD</span>
+            </div>
+
+            <div className="flex justify-between text-sm">
+              <span>Transport</span>
+              <span className="capitalize">{ticket.transport}</span>
+            </div>
+
+            <button
+              disabled={disabled}
+              onClick={() =>
+                document.getElementById("book_modal").showModal()
+              }
+              className={`btn btn-primary w-full mt-3 ${
+                disabled && "btn-disabled"
+              }`}
+            >
+              Book Now
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* MODAL */}
       <dialog id="book_modal" className="modal modal-bottom sm:modal-middle">
         <div className="modal-box">
-          <h3 className="font-bold text-lg mb-4">Book Ticket</h3>
+          <h3 className="font-bold text-lg mb-4">Confirm Booking</h3>
 
-          <form onSubmit={handleBooking}>
-            <label className="block mb-2">Enter Quantity:</label>
-
+          <form onSubmit={handleBooking} className="space-y-4">
             <input
               type="number"
               min="1"
@@ -200,28 +219,17 @@ const TicketDetails = () => {
               className="input input-bordered w-full"
             />
 
-            {bookQty > ticket.quantity && (
-              <p className="text-red-600 text-sm mt-2">
-                Cannot exceed available quantity!
-              </p>
-            )}
-
             <div className="modal-action">
               <button
                 type="button"
                 className="btn"
-                onClick={() => document.getElementById("book_modal").close()}
+                onClick={() =>
+                  document.getElementById("book_modal").close()
+                }
               >
                 Cancel
               </button>
-
-              <button
-                type="submit"
-                disabled={bookQty > ticket.quantity}
-                className="btn btn-primary"
-              >
-                Confirm Booking
-              </button>
+              <button className="btn btn-primary">Confirm</button>
             </div>
           </form>
         </div>
@@ -229,5 +237,20 @@ const TicketDetails = () => {
     </div>
   );
 };
+
+/* ================= REUSABLE INFO CARD ================= */
+const InfoCard = ({ icon, label, value }) => (
+  <div className="card bg-base-100 border border-base-300 shadow-sm">
+    <div className="card-body">
+      <div className="flex items-center gap-3">
+        <span className="text-primary text-xl">{icon}</span>
+        <div>
+          <p className="text-sm text-base-content/60">{label}</p>
+          <p className="font-semibold">{value}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+);
 
 export default TicketDetails;

@@ -4,20 +4,33 @@ import { FaPlaneDeparture } from "react-icons/fa";
 import { FiSun, FiMoon } from "react-icons/fi";
 import UseAuth from "../../Hooks/UseAuth";
 import useTheme from "../../Hooks/UseTheme";
+import {
+  confirmAction,
+  successAlert,
+  errorAlert,
+} from "../../Utils/swal";
 
 const Navbar = () => {
   const { user, signOutUser } = UseAuth();
   const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
 
-  const handleLogout = () => {
-    signOutUser().then(() => navigate("/"));
-  };
+  /* ---------------- LOGOUT ---------------- */
+  const handleLogout = async () => {
+    const result = await confirmAction({
+      title: "Logout?",
+      text: "Are you sure you want to logout?",
+      confirmButtonText: "Yes, Logout",
+    });
 
-  const handleProtectedNav = (e) => {
-    if (!user) {
-      e.preventDefault();
-      navigate("/auth/login");
+    if (!result.isConfirmed) return;
+
+    try {
+      await signOutUser();
+      await successAlert("Logged Out", "You have been logged out successfully");
+      navigate("/");
+    } catch (err) {
+      errorAlert(err,"Logout Failed", "Something went wrong. Try again.");
     }
   };
 
@@ -37,32 +50,19 @@ const Navbar = () => {
           <label tabIndex={0} className="btn btn-ghost text-xl">
             ☰
           </label>
-          <ul
-            tabIndex={0}
-            className="menu menu-sm dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52"
-          >
+          <ul className="menu menu-sm dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52">
             <li>
               <NavLink to="/" className={navItemClass}>
                 Home
               </NavLink>
             </li>
-
             <li>
-              <NavLink
-                to="/all-tickets"
-                onClick={(e) => handleProtectedNav(e)}
-                className={navItemClass}
-              >
+              <NavLink to="/all-tickets" className={navItemClass}>
                 All Tickets
               </NavLink>
             </li>
-
             <li>
-              <NavLink
-                to="/dashboard"
-                onClick={(e) => handleProtectedNav(e)}
-                className={navItemClass}
-              >
+              <NavLink to="/dashboard" className={navItemClass}>
                 Dashboard
               </NavLink>
             </li>
@@ -76,7 +76,7 @@ const Navbar = () => {
         </Link>
       </div>
 
-      {/* CENTER (DESKTOP) */}
+      {/* CENTER */}
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal gap-2">
           <li>
@@ -84,23 +84,13 @@ const Navbar = () => {
               Home
             </NavLink>
           </li>
-
           <li>
-            <NavLink
-              to="/all-tickets"
-              onClick={(e) => handleProtectedNav(e)}
-              className={navItemClass}
-            >
+            <NavLink to="/all-tickets" className={navItemClass}>
               All Tickets
             </NavLink>
           </li>
-
           <li>
-            <NavLink
-              to="/dashboard"
-              onClick={(e) => handleProtectedNav(e)}
-              className={navItemClass}
-            >
+            <NavLink to="/dashboard" className={navItemClass}>
               Dashboard
             </NavLink>
           </li>
@@ -121,11 +111,11 @@ const Navbar = () => {
               to="/auth/login"
               className={({ isActive }) =>
                 `
-      btn rounded-lg transition-all duration-300
-      border border-primary bg-transparent text-primary
-      hover:bg-primary/10
-      ${isActive ? "bg-primary text-primary-content" : ""}
-      `
+                btn rounded-lg transition-all duration-300
+                border border-primary bg-transparent text-primary
+                hover:bg-primary/10
+                ${isActive ? "bg-primary text-primary-content" : ""}
+                `
               }
             >
               Login
@@ -136,11 +126,11 @@ const Navbar = () => {
               to="/auth/register"
               className={({ isActive }) =>
                 `
-      btn rounded-lg transition-all duration-300
-      border border-primary bg-transparent text-primary
-      hover:bg-primary/10
-      ${isActive ? "bg-primary text-primary-content" : ""}
-      `
+                btn rounded-lg transition-all duration-300
+                border border-primary bg-transparent text-primary
+                hover:bg-primary/10
+                ${isActive ? "bg-primary text-primary-content" : ""}
+                `
               }
             >
               Register
@@ -159,15 +149,15 @@ const Navbar = () => {
               </span>
             </label>
 
-            <ul
-              tabIndex={0}
-              className="menu menu-sm dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-44"
-            >
+            <ul className="menu menu-sm dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-44">
               <li>
-                <Link to="/dashboard/profile">My Profile</Link>
+                <Link to="/nav-profile">My Profile</Link>
               </li>
               <li>
-                <button onClick={handleLogout} className="text-red-500">
+                <button
+                  onClick={handleLogout}
+                  className="text-red-500"
+                >
                   Logout
                 </button>
               </li>

@@ -7,6 +7,9 @@ import AuthProvider from "./Contexts/AuthProvider.jsx";
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import ThemeProvider from "./Contexts/ThemeProvider.jsx";
+import { Toaster } from "react-hot-toast";
+
+<Toaster position="top-center" reverseOrder={false} />
 
 const queryClient = new QueryClient();
 

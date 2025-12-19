@@ -80,7 +80,7 @@ const LatestTickets = () => {
               <p className="text-sm text-base-content/70">
                 Price:{" "}
                 <span className="font-semibold">
-                  {ticket.price} BDT
+                  {ticket.price} USD
                 </span>
               </p>
 

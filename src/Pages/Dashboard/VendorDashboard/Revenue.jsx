@@ -54,7 +54,7 @@ const Revenue = () => {
   const revenueData = [{ name: "Revenue", value: summary.totalRevenue }];
 
   const ticketData = [
-    { name: "Tickets Sold", value: summary.ticketsSold },
+    { name: "Sold", value: summary.ticketsSold },
     { name: "Tickets Added", value: summary.ticketsAdded },
   ];
 
@@ -70,13 +70,15 @@ const Revenue = () => {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         <Stat
           title="Total Revenue"
-          value={`৳${summary.totalRevenue}`}
+          value={`$ ${summary.totalRevenue}`}
           color={COLORS.revenue}
+        
         />
         <Stat
-          title="Tickets Sold"
+          title="Sold"
           value={summary.ticketsSold}
           color={COLORS.sold}
+         
         />
         <Stat
           title="Tickets Added"
@@ -86,7 +88,7 @@ const Revenue = () => {
       </div>
 
       {/* ================= CHARTS ================= */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 pt-10 pb-10">
         <Donut
           title="Total Revenue"
           data={revenueData}
