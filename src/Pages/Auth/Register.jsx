@@ -113,7 +113,7 @@ const Register = () => {
             onClick={() => setShowPassword(!showPassword)}
             className="absolute right-3 top-1/2 -translate-y-1/2 text-xl"
           >
-            {showPassword ? <FiEyeOff /> : <FiEye />}
+            {showPassword ?  <FiEye /> : <FiEyeOff />}
           </button>
         </div>
 

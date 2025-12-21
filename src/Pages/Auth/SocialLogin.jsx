@@ -11,14 +11,12 @@ const SocialLogin = () => {
 
   const handleGoogleSignIn = async () => {
     try {
-      // 1️⃣ Google login
       const result = await signInWithGoogle();
       const user = result.user;
 
-      // ✅ IMPORTANT: Force token refresh
+      // Force token refresh
       await auth.currentUser.getIdToken(true);
 
-      // 2️⃣ Save user to DB
       await axiosSecure.post("/users", {
         name: user.displayName,
         email: user.email,
@@ -26,7 +24,6 @@ const SocialLogin = () => {
         role: "user",
       });
 
-      // 3️⃣ Redirect
       navigate(location.state || "/");
     } catch (error) {
       console.error("Google login error:", error);
@@ -34,12 +31,17 @@ const SocialLogin = () => {
   };
 
   return (
-    <div className="text-center pb-8 mt-4">
-      <p className="mb-2">or</p>
+    <div className="text-center mt-4 pb-6 sm:pb-8 px-4">
+      <p className="mb-3 text-sm sm:text-base">or</p>
 
       <button
         onClick={handleGoogleSignIn}
-        className="btn bg-white text-black border w-[330px]"
+        className="
+          btn bg-white text-black border
+          flex items-center justify-center gap-3
+          w-full sm:w-[320px] md:w-[340px]
+          mx-auto
+        "
       >
         <svg width="16" height="16" viewBox="0 0 512 512">
           <path fill="#fff" d="M0 0h512v512H0z" />
@@ -48,7 +50,9 @@ const SocialLogin = () => {
           <path fill="#fbbc02" d="M90 341a208 200 0 010-171l63 49q-12 37 0 73" />
           <path fill="#ea4335" d="M153 219c22-69 116-109 179-50l55-54c-78-75-230-72-297 55" />
         </svg>
-        Login with Google
+        <span className="text-sm sm:text-base font-medium">
+          Login with Google
+        </span>
       </button>
     </div>
   );

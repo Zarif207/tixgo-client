@@ -15,7 +15,6 @@ const Navbar = () => {
   const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
 
-  /* ---------------- LOGOUT ---------------- */
   const handleLogout = async () => {
     const result = await confirmAction({
       title: "Logout?",
@@ -30,7 +29,7 @@ const Navbar = () => {
       await successAlert("Logged Out", "You have been logged out successfully");
       navigate("/");
     } catch (err) {
-      errorAlert(err,"Logout Failed", "Something went wrong. Try again.");
+      errorAlert(err, "Logout Failed", "Something went wrong. Try again.");
     }
   };
 
@@ -42,15 +41,47 @@ const Navbar = () => {
     `${baseLink} ${isActive ? activeLink : ""}`;
 
   return (
-    <div className="navbar sticky top-0 z-50 backdrop-blur-md bg-base-100/80 shadow-sm px-4 lg:px-10">
-      {/* LEFT */}
-      <div className="navbar-start">
-        {/* MOBILE */}
-        <div className="dropdown lg:hidden">
-          <label tabIndex={0} className="btn btn-ghost text-xl">
-            ☰
-          </label>
-          <ul className="menu menu-sm dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52">
+    <div className="sticky top-0 z-50 backdrop-blur-md bg-base-100/80 shadow-sm">
+      <div className="navbar px-4 sm:px-6 lg:px-10 max-w-7xl mx-auto">
+        {/* LEFT */}
+        <div className="navbar-start gap-2">
+          {/* MOBILE MENU */}
+          <div className="dropdown md:hidden">
+            <label tabIndex={0} className="btn btn-ghost text-2xl px-2">
+              ☰
+            </label>
+            <ul className="menu menu-sm dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-56">
+              <li>
+                <NavLink to="/" className={navItemClass}>
+                  Home
+                </NavLink>
+              </li>
+              <li>
+                <NavLink to="/all-tickets" className={navItemClass}>
+                  All Tickets
+                </NavLink>
+              </li>
+              <li>
+                <NavLink to="/dashboard" className={navItemClass}>
+                  Dashboard
+                </NavLink>
+              </li>
+            </ul>
+          </div>
+
+          {/* LOGO */}
+          <Link
+            to="/"
+            className="flex items-center gap-2 text-xl sm:text-2xl font-bold"
+          >
+            <FaPlaneDeparture className="text-primary text-2xl" />
+            TixGo
+          </Link>
+        </div>
+
+        {/* CENTER (TABLET + DESKTOP) */}
+        <div className="navbar-center hidden md:flex">
+          <ul className="menu menu-horizontal gap-1 lg:gap-2">
             <li>
               <NavLink to="/" className={navItemClass}>
                 Home
@@ -69,101 +100,78 @@ const Navbar = () => {
           </ul>
         </div>
 
-        {/* LOGO */}
-        <Link to="/" className="flex items-center gap-2 text-2xl font-bold">
-          <FaPlaneDeparture className="text-primary" />
-          TixGo
-        </Link>
-      </div>
+        {/* RIGHT */}
+        <div className="navbar-end gap-2 sm:gap-3">
+          {/* THEME */}
+          <button
+            onClick={toggleTheme}
+            className="btn btn-ghost btn-circle"
+          >
+            {theme === "dark" ? <FiSun /> : <FiMoon />}
+          </button>
 
-      {/* CENTER */}
-      <div className="navbar-center hidden lg:flex">
-        <ul className="menu menu-horizontal gap-2">
-          <li>
-            <NavLink to="/" className={navItemClass}>
-              Home
-            </NavLink>
-          </li>
-          <li>
-            <NavLink to="/all-tickets" className={navItemClass}>
-              All Tickets
-            </NavLink>
-          </li>
-          <li>
-            <NavLink to="/dashboard" className={navItemClass}>
-              Dashboard
-            </NavLink>
-          </li>
-        </ul>
-      </div>
+          {!user ? (
+            <>
+              <NavLink
+                to="/auth/login"
+                className={({ isActive }) =>
+                  `
+                  btn btn-sm sm:btn-md rounded-lg
+                  border border-primary bg-transparent text-primary
+                  hover:bg-primary/10
+                  ${isActive ? "bg-primary text-primary-content" : ""}
+                  `
+                }
+              >
+                Login
+              </NavLink>
 
-      {/* RIGHT */}
-      <div className="navbar-end gap-3">
-        {/* THEME */}
-        <button onClick={toggleTheme} className="btn btn-ghost btn-circle">
-          {theme === "dark" ? <FiSun /> : <FiMoon />}
-        </button>
+              <NavLink
+                to="/auth/register"
+                className={({ isActive }) =>
+                  `
+                  btn btn-sm sm:btn-md rounded-lg
+                  border border-primary bg-transparent text-primary
+                  hover:bg-primary/10
+                  ${isActive ? "bg-primary text-primary-content" : ""}
+                  `
+                }
+              >
+                Register
+              </NavLink>
+            </>
+          ) : (
+            <div className="dropdown dropdown-end">
+              <label
+                tabIndex={0}
+                className="btn btn-ghost flex gap-2 px-2 sm:px-3"
+              >
+                <img
+                  src={user.photoURL || "https://i.ibb.co/4pDNDk1/avatar.png"}
+                  alt="avatar"
+                  className="w-8 h-8 rounded-full"
+                />
+                <span className="hidden sm:block font-medium">
+                  {user.displayName || "User"}
+                </span>
+              </label>
 
-        {!user ? (
-          <>
-            {/* LOGIN */}
-            <NavLink
-              to="/auth/login"
-              className={({ isActive }) =>
-                `
-                btn rounded-lg transition-all duration-300
-                border border-primary bg-transparent text-primary
-                hover:bg-primary/10
-                ${isActive ? "bg-primary text-primary-content" : ""}
-                `
-              }
-            >
-              Login
-            </NavLink>
-
-            {/* REGISTER */}
-            <NavLink
-              to="/auth/register"
-              className={({ isActive }) =>
-                `
-                btn rounded-lg transition-all duration-300
-                border border-primary bg-transparent text-primary
-                hover:bg-primary/10
-                ${isActive ? "bg-primary text-primary-content" : ""}
-                `
-              }
-            >
-              Register
-            </NavLink>
-          </>
-        ) : (
-          <div className="dropdown dropdown-end">
-            <label tabIndex={0} className="btn btn-ghost flex gap-2">
-              <img
-                src={user.photoURL || "https://i.ibb.co/4pDNDk1/avatar.png"}
-                alt="avatar"
-                className="w-8 h-8 rounded-full"
-              />
-              <span className="hidden md:block font-medium">
-                {user.displayName || "User"}
-              </span>
-            </label>
-
-            <ul className="menu menu-sm dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-44">
-              <li>
-                <Link to="/nav-profile">My Profile</Link>
-              </li>
-              <li>
-                <button
-                  onClick={handleLogout}
-                  className="text-red-500"
-                >
-                  Logout
-                </button>
-              </li>
-            </ul>
-          </div>
-        )}
+              <ul className="menu menu-sm dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-44">
+                <li>
+                  <Link to="/nav-profile">My Profile</Link>
+                </li>
+                <li>
+                  <button
+                    onClick={handleLogout}
+                    className="text-red-500"
+                  >
+                    Logout
+                  </button>
+                </li>
+              </ul>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

@@ -71,9 +71,9 @@ const NavProfile = () => {
           <RolePanel
             title="User Access"
             items={[
-              "View booked tickets",
-              "Manage profile",
-              "Track booking history",
+              "User Profile",
+              "My Booked Tickets",
+              "Transaction History",
             ]}
           />
         )}
@@ -83,10 +83,11 @@ const NavProfile = () => {
           <RolePanel
             title="Vendor Panel"
             items={[
-              "Add new tickets",
-              "Manage your tickets",
-              "View bookings",
-              "Track revenue",
+              "Vendor Profile",
+              "Add Ticket",
+              "My Added Tickets",
+              "Requested Bookings",
+              "Revenue Overview",
             ]}
           />
         )}
@@ -96,10 +97,10 @@ const NavProfile = () => {
           <RolePanel
             title="Admin Control"
             items={[
-              "Manage users",
-              "Approve vendors",
-              "Monitor platform activity",
-              "Handle fraud reports",
+              "Admin Profile",
+              "Manage Tickets",
+              "Manage Users",
+              "Advertise Tickets",
             ]}
           />
         )}

@@ -42,8 +42,8 @@ const Extra_2 = () => {
     <section className="bg-base-100 py-24 px-6 border-y border-base-300">
       {/* Header */}
       <div className="max-w-3xl mx-auto text-center mb-16">
-        <h2 className="text-4xl font-bold mb-4">
-          Why Choose Us?
+        <h2 className="text-4xl md:text-5xl font-extrabold mb-6 tracking-tight">
+          Why <span className="text-primary">Choose</span> Us?
         </h2>
         <p className="opacity-70 text-lg">
           Learn why thousands of travelers trust our platform for safe,

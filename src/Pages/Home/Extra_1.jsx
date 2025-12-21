@@ -11,94 +11,119 @@ const Extra_1 = () => {
   const routes = [
     {
       id: 1,
-      from: "Dhaka",
-      to: "Chittagong",
+      from: "New York",
+      to: "Washington D.C.",
       type: "Bus",
       icon: FaBus,
       desc:
-        "Comfortable bus journeys with multiple departures every day. Ideal for budget-friendly and relaxed travel.",
+        "Comfortable intercity bus services with frequent departures, ideal for affordable and relaxed travel across states.",
     },
     {
       id: 2,
-      from: "Dhaka",
-      to: "Sylhet",
+      from: "London",
+      to: "Paris",
       type: "Train",
       icon: FaTrain,
       desc:
-        "Enjoy scenic train routes with spacious seating, perfect for long-distance travelers who value comfort.",
+        "High-speed international rail travel offering smooth journeys, modern seating, and stunning European landscapes.",
     },
     {
       id: 3,
-      from: "Barishal",
-      to: "Dhaka",
+      from: "Sydney",
+      to: "Auckland",
       type: "Launch",
       icon: FaShip,
       desc:
-        "Experience river travel with overnight launches offering cabins, dining, and a calm journey.",
+        "Premium sea travel with cabins and onboard dining, perfect for relaxed international ocean journeys.",
     },
     {
       id: 4,
-      from: "Dhaka",
-      to: "Cox’s Bazar",
+      from: "Dubai",
+      to: "Tokyo",
       type: "Plane",
       icon: FaPlane,
       desc:
-        "Fast and premium air travel to Bangladesh’s top tourist destination with multiple daily flights.",
+        "Fast, premium long-haul flights connecting global cities with world-class comfort and service.",
     },
   ];
 
   return (
-    <section className="bg-base-200 py-20 px-6">
+    <section className="relative bg-gradient-to-b from-base-200/70 via-base-100 to-base-200/70 py-24 px-6 overflow-hidden">
+      {/* background glow */}
+      <div className="absolute -top-40 -left-40 w-96 h-96 bg-primary/10 rounded-full blur-3xl" />
+      <div className="absolute -bottom-40 -right-40 w-96 h-96 bg-secondary/10 rounded-full blur-3xl" />
+
       {/* Section Header */}
-      <div className="max-w-3xl mx-auto text-center mb-20">
-        <h2 className="text-4xl md:text-5xl font-bold mb-6">
-          Travel Made Simple
+      <div className="relative max-w-3xl mx-auto text-center mb-24">
+        <h2 className="text-4xl md:text-5xl font-extrabold mb-6 tracking-tight">
+          Travel, <span className="text-primary">Simplified</span>
         </h2>
-        <p className="text-lg opacity-70">
-          Explore Bangladesh with multiple transport options tailored for
-          comfort, budget, and speed. Choose what suits your journey best.
+        <p className="text-lg text-base-content/70 leading-relaxed">
+          Seamlessly explore international routes with modern transport
+          options designed for global travelers.
         </p>
       </div>
 
-      {/* Zig-Zag Content */}
-      <div className="max-w-6xl mx-auto space-y-24">
+      {/* Routes */}
+      <div className="relative max-w-6xl mx-auto space-y-28">
         {routes.map((route, index) => {
           const Icon = route.icon;
-          const isReverse = index % 2 !== 0;
+          const reverse = index % 2 !== 0;
 
           return (
             <div
               key={route.id}
               className={`flex flex-col ${
-                isReverse ? "md:flex-row-reverse" : "md:flex-row"
-              } items-center gap-12`}
+                reverse ? "md:flex-row-reverse" : "md:flex-row"
+              } items-center gap-14`}
             >
-              {/* Icon Card */}
+              {/* ICON */}
               <div className="flex-shrink-0">
-                <div className="w-28 h-28 rounded-3xl bg-primary text-primary-content flex items-center justify-center text-5xl shadow-lg">
+                <div
+                  className="
+                    w-32 h-32 rounded-[2rem]
+                    bg-gradient-to-br from-primary to-primary/80
+                    text-primary-content
+                    flex items-center justify-center
+                    text-5xl
+                    shadow-xl shadow-primary/30
+                    transition-all duration-300
+                    hover:scale-105
+                  "
+                >
                   <Icon />
                 </div>
               </div>
 
-              {/* Text Content */}
-              <div className="bg-base-100 border border-base-300 rounded-3xl p-8 md:p-10 shadow-md max-w-xl">
-                <span className="badge badge-primary badge-outline mb-4">
+              {/* CARD */}
+              <div
+                className="
+                  bg-base-100/80 backdrop-blur-xl
+                  border border-base-300
+                  rounded-[2.5rem]
+                  p-8 md:p-10
+                  shadow-lg hover:shadow-2xl
+                  transition-all duration-300
+                  max-w-xl
+                "
+              >
+                <span className="inline-block mb-4 px-4 py-1 rounded-full text-sm font-semibold bg-primary/10 text-primary">
                   {route.type}
                 </span>
 
-                <h3 className="text-2xl md:text-3xl font-semibold mb-3">
+                <h3 className="text-2xl md:text-3xl font-bold mb-4 flex items-center flex-wrap gap-3">
                   {route.from}
-                  <FaArrowRight className="inline mx-3 opacity-60" />
+                  <FaArrowRight className="opacity-50" />
                   {route.to}
                 </h3>
 
-                <p className="opacity-80 leading-relaxed mb-4">
+                <p className="text-base-content/80 leading-relaxed mb-5">
                   {route.desc}
                 </p>
 
-                <p className="opacity-70 text-sm">
-                  Book tickets instantly, track your journey, and enjoy secure
-                  payments — all in one platform designed for modern travelers.
+                <p className="text-sm text-base-content/60">
+                  Book globally, travel confidently, and enjoy seamless
+                  journeys powered by a modern ticketing platform.
                 </p>
               </div>
             </div>

@@ -72,41 +72,44 @@ const AllTickets = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-base-200 via-base-100 to-base-200 px-4 py-12">
       <div className="max-w-7xl mx-auto">
-        <h2 className="text-4xl font-extrabold text-center mb-10">
-          All Tickets
+        {/* TITLE */}
+        <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-12">
+          Explore <span className="text-primary">All Tickets</span>
         </h2>
 
         {/* CONTROLS */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10">
-          <input
-            type="text"
-            placeholder="Search From → To"
-            className="input input-bordered w-full"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
+        <div className="bg-base-100/80 backdrop-blur-md border border-base-300 rounded-2xl p-5 mb-12 shadow-lg">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <input
+              type="text"
+              placeholder="Search From → To"
+              className="input input-bordered w-full"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
 
-          <select
-            className="select select-bordered w-full"
-            value={transport}
-            onChange={(e) => setTransport(e.target.value)}
-          >
-            <option value="">All Transport</option>
-            <option value="Bus">Bus</option>
-            <option value="Train">Train</option>
-            <option value="Launch">Launch</option>
-            <option value="Plane">Plane</option>
-          </select>
+            <select
+              className="select select-bordered w-full"
+              value={transport}
+              onChange={(e) => setTransport(e.target.value)}
+            >
+              <option value="">All Transport</option>
+              <option value="Bus">Bus</option>
+              <option value="Train">Train</option>
+              <option value="Launch">Launch</option>
+              <option value="Plane">Plane</option>
+            </select>
 
-          <select
-            className="select select-bordered w-full"
-            value={sort}
-            onChange={(e) => setSort(e.target.value)}
-          >
-            <option value="">Sort by Price</option>
-            <option value="low">Low → High</option>
-            <option value="high">High → Low</option>
-          </select>
+            <select
+              className="select select-bordered w-full"
+              value={sort}
+              onChange={(e) => setSort(e.target.value)}
+            >
+              <option value="">Sort by Price</option>
+              <option value="low">Low → High</option>
+              <option value="high">High → Low</option>
+            </select>
+          </div>
         </div>
 
         {/* GRID */}
@@ -114,59 +117,80 @@ const AllTickets = () => {
           {paginatedTickets.map((ticket) => (
             <div
               key={ticket._id}
-              className="bg-base-100 border border-base-300 
-              rounded-2xl shadow-xl hover:shadow-2xl transition
-              flex flex-col h-full"
+              className="
+                group bg-base-100/90 backdrop-blur
+                border border-base-300
+                rounded-3xl overflow-hidden
+                shadow-lg hover:shadow-2xl
+                transition-all duration-300
+                hover:-translate-y-1
+                flex flex-col
+              "
             >
               {/* IMAGE */}
-              <img
-                src={ticket.image}
-                alt={ticket.title}
-                className="h-52 w-full object-cover rounded-t-2xl"
-              />
+              <div className="relative h-52 overflow-hidden">
+                <img
+                  src={ticket.image}
+                  alt={ticket.title}
+                  className="
+                    w-full h-full object-cover
+                    transition-transform duration-500
+                    group-hover:scale-110
+                  "
+                />
+
+                <span className="absolute top-4 right-4 badge badge-primary badge-lg shadow">
+                  {ticket.transport}
+                </span>
+              </div>
 
               {/* BODY */}
               <div className="p-6 flex flex-col flex-grow">
-                <h3 className="text-xl font-bold mb-1">{ticket.title}</h3>
+                <h3 className="text-xl font-bold mb-1 line-clamp-2">
+                  {ticket.title}
+                </h3>
 
-                <p className="flex items-center gap-2 opacity-80 mb-2">
+                <p className="flex items-center gap-2 opacity-80 mb-3">
                   <FaRoute />
                   {ticket.from} → {ticket.to}
                 </p>
 
-                <div className="flex flex-wrap gap-2 mb-3">
-                  <span className="badge badge-outline badge-primary">
-                    {ticket.transport}
-                  </span>
+                {/* META */}
+                <div className="flex flex-wrap gap-2 mb-4">
                   <span className="badge badge-outline">
                     <FaTicketAlt className="mr-1" />
-                    {ticket.quantity}
+                    {ticket.quantity} seats
+                  </span>
+                  <span className="badge badge-outline badge-success">
+                    <FaMoneyBillWave className="mr-1" />
+                    {ticket.price} USD
                   </span>
                 </div>
 
-                {/* PERKS (fixed height) */}
-                <div className="mb-3 min-h-[72px]">
+                {/* PERKS */}
+                <div className="mb-4 min-h-[72px] space-y-1">
                   {ticket.perks?.slice(0, 3).map((perk, i) => (
-                    <p key={i} className="text-sm flex items-center gap-2">
+                    <p
+                      key={i}
+                      className="text-sm flex items-center gap-2 opacity-90"
+                    >
                       <FaCheckCircle className="text-success" />
                       {perk}
                     </p>
                   ))}
                 </div>
 
-                <p className="text-sm mb-3 flex items-center gap-2">
+                <p className="text-sm flex items-center gap-2 opacity-70 mb-5">
                   <FaClock />
                   {ticket.departure}
                 </p>
 
-                <p className="font-semibold mb-4 flex items-center gap-2">
-                  <FaMoneyBillWave />
-                  {ticket.price} USD / ticket
-                </p>
-
-                {/* BUTTON ALWAYS BOTTOM */}
-                <Link to={`/ticket-details/${ticket._id}`} className="mt-auto">
-                  <button className="btn btn-primary w-full">
+                {/* BUTTON */}
+                <Link
+                  to={`/ticket-details/${ticket._id}`}
+                  className="mt-auto"
+                >
+                  <button className="btn btn-primary w-full rounded-xl tracking-wide">
                     See Details
                   </button>
                 </Link>
@@ -177,12 +201,12 @@ const AllTickets = () => {
 
         {/* PAGINATION */}
         {totalPages > 1 && (
-          <div className="flex justify-center mt-12 gap-2">
+          <div className="flex flex-wrap justify-center mt-14 gap-2">
             {[...Array(totalPages).keys()].map((n) => (
               <button
                 key={n}
                 onClick={() => setCurrentPage(n + 1)}
-                className={`btn btn-sm ${
+                className={`btn btn-sm rounded-full ${
                   currentPage === n + 1
                     ? "btn-primary"
                     : "btn-outline"

@@ -1,37 +1,35 @@
 import React, { useState, useEffect } from "react";
-import { 
-  FaSearch, 
-  FaBusAlt, 
-  FaTrain, 
-  FaShip, 
-  FaPlane
-} from "react-icons/fa";
+import { FaSearch, FaBusAlt, FaTrain, FaShip, FaPlane } from "react-icons/fa";
 
 /* ================= TRAVEL BANNERS ================= */
 const banners = [
   {
-    image: "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=1920&q=80",
-    title: "Bus Travel"
+    image:
+      "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=1920&q=80",
+    title: "Bus Travel",
   },
   {
-    image: "https://images.unsplash.com/photo-1474487548417-781cb71495f3?auto=format&fit=crop&w=1920&q=80",
-    title: "Train Routes"
+    image:
+      "https://images.unsplash.com/photo-1474487548417-781cb71495f3?auto=format&fit=crop&w=1920&q=80",
+    title: "Train Routes",
   },
   {
-    image: "https://images.unsplash.com/photo-1593693397690-362cb9666fc2?auto=format&fit=crop&w=1920&q=80",
-    title: "Launch Services"
+    image:
+      "https://images.unsplash.com/photo-1593693397690-362cb9666fc2?auto=format&fit=crop&w=1920&q=80",
+    title: "Launch Services",
   },
   {
-    image: "https://www.latitudeaircharters.com/wp-content/uploads/2021/07/King-Air.jpg",
-    title: "Flight Tickets"
-  }
+    image:
+      "https://www.latitudeaircharters.com/wp-content/uploads/2021/07/King-Air.jpg",
+    title: "Flight Tickets",
+  },
 ];
 
 const travelModes = [
   { icon: FaBusAlt, label: "Bus" },
   { icon: FaTrain, label: "Train" },
   { icon: FaShip, label: "Launch" },
-  { icon: FaPlane, label: "Flight" }
+  { icon: FaPlane, label: "Flight" },
 ];
 
 const HeroSection = () => {
@@ -71,7 +69,6 @@ const HeroSection = () => {
       <div className="relative z-10 h-full flex items-center">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
           <div className="max-w-3xl mx-auto text-center">
-            
             {/* Main Heading */}
             <h1 className="text-5xl sm:text-6xl md:text-7xl font-bold text-gray-900 dark:text-white mb-6">
               Book Your Journey
@@ -79,12 +76,24 @@ const HeroSection = () => {
 
             {/* Description */}
             <p className="text-lg sm:text-xl text-gray-700 dark:text-gray-300 mb-8 max-w-2xl mx-auto">
-              Find and book bus, train, launch, and flight tickets from trusted vendors
+              Find and book bus, train, launch, and flight tickets from trusted
+              vendors
             </p>
 
             {/* Search Button */}
-            <button className="inline-flex items-center gap-3 px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold text-lg rounded-lg shadow-lg transition-colors">
-              <FaSearch />
+            <button
+              className="
+            inline-flex items-center gap-3
+            px-8 py-4
+            bg-primary hover:bg-primary-focus
+            text-primary-content
+            font-semibold text-lg
+            rounded-xl
+            shadow-lg hover:shadow-xl
+            hover:ring-4 hover:ring-primary/30
+            transition-all duration-300"
+            >
+              <FaSearch className="text-xl" />
               Search Tickets
             </button>
 
@@ -110,8 +119,8 @@ const HeroSection = () => {
                 key={i}
                 onClick={() => setCurrentSlide(i)}
                 className={`w-12 h-1 rounded-full transition-all ${
-                  i === currentSlide 
-                    ? "bg-blue-600 dark:bg-blue-400" 
+                  i === currentSlide
+                    ? "bg-blue-600 dark:bg-blue-400"
                     : "bg-gray-400/50 dark:bg-gray-600/50"
                 }`}
               />

@@ -74,7 +74,7 @@ const ContactUs = () => {
                     Office Location
                   </p>
                   <p className="text-base-content/70">
-                    Dhaka, Bangladesh
+                    New York, USA
                   </p>
                 </div>
               </div>

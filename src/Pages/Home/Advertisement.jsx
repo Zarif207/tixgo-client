@@ -3,9 +3,9 @@ import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router";
 import UseAxios from "../../Hooks/UseAxios";
 import {
-  FaMoneyBillWave,
   FaBusAlt,
   FaCheckCircle,
+  FaArrowRight,
 } from "react-icons/fa";
 
 const Advertisement = () => {
@@ -16,7 +16,7 @@ const Advertisement = () => {
     queryKey: ["advertisedTickets"],
     queryFn: async () => {
       const res = await axios.get("/tickets/advertised?limit=6");
-      return res.data;
+      return res.data || [];
     },
   });
 
@@ -29,30 +29,33 @@ const Advertisement = () => {
   }
 
   return (
-    <section className="bg-base-100 py-24 px-4">
+    <section className="relative py-28 px-4 bg-gradient-to-br from-base-200 via-base-100 to-base-200">
       <div className="max-w-7xl mx-auto">
-        {/* SECTION HEADER */}
-        <div className="text-center mb-14 max-w-3xl mx-auto">
-          <h2 className="text-4xl font-bold mb-4">
-            Featured Advertisement Tickets
+        {/* HEADER */}
+        <div className="text-center mb-16 max-w-3xl mx-auto">
+          <h2 className="text-4xl md:text-5xl font-extrabold mb-4">
+            Featured{" "}
+            <span className="text-primary">Advertisement</span> Tickets
           </h2>
           <p className="text-base-content/70 text-lg">
-            Hand-picked tickets promoted by our admin for the best
-            routes, prices, and comfort.
+            Premium routes with top comfort and value.
           </p>
         </div>
 
         {/* GRID */}
-        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
           {ads.map((ticket) => (
             <div
               key={ticket._id}
               className="
-                group bg-base-200 border border-base-300
-                rounded-2xl overflow-hidden
-                shadow-sm hover:shadow-xl
-                transition-all duration-300
-                flex flex-col
+                relative group rounded-3xl
+                bg-base-100/80 backdrop-blur-xl
+                border border-base-300
+                shadow-[0_20px_40px_rgba(0,0,0,0.12)]
+                hover:shadow-[0_30px_60px_rgba(0,0,0,0.18)]
+                transition-all duration-500
+                hover:-translate-y-2
+                flex flex-col overflow-hidden
               "
             >
               {/* IMAGE */}
@@ -60,11 +63,18 @@ const Advertisement = () => {
                 <img
                   src={ticket.image}
                   alt={ticket.title}
-                  className="h-52 w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                  className="
+                    h-56 w-full object-cover
+                    transition-transform duration-500
+                    group-hover:scale-110
+                  "
                 />
 
-                {/* PRICE BADGE */}
-                <div className="absolute top-4 right-4 bg-primary text-primary-content px-4 py-1 rounded-full font-bold text-sm shadow">
+                {/* GRADIENT OVERLAY */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+
+                {/* PRICE */}
+                <div className="absolute bottom-4 left-4 bg-primary text-primary-content px-4 py-1 rounded-full text-sm font-bold shadow">
                   ${ticket.price} / ticket
                 </div>
               </div>
@@ -72,12 +82,12 @@ const Advertisement = () => {
               {/* CONTENT */}
               <div className="p-6 flex flex-col flex-grow">
                 {/* TITLE */}
-                <h3 className="text-xl font-semibold mb-2">
+                <h3 className="text-xl font-semibold mb-1">
                   {ticket.title}
                 </h3>
 
                 {/* META */}
-                <div className="flex items-center justify-between text-sm mb-4 text-base-content/70">
+                <div className="flex items-center justify-between text-sm text-base-content/70 mb-3">
                   <span>
                     Qty:{" "}
                     <span className="font-semibold text-base-content">
@@ -106,18 +116,22 @@ const Advertisement = () => {
                   ))}
                 </div>
 
-                {/* BUTTON */}
-                <button
-                  onClick={() =>
-                    navigate(`/ticket-details/${ticket._id}`)
-                  }
-                  className="
-                    mt-auto btn btn-primary w-full rounded-xl
-                    tracking-wide
-                  "
-                >
-                  See Details
-                </button>
+                {/* DETAILS BUTTON */}
+                <div className="mt-auto flex justify-end">
+                  <button
+                    onClick={() =>
+                      navigate(`/ticket-details/${ticket._id}`)
+                    }
+                    className="
+                      group/details inline-flex items-center gap-2
+                      text-primary font-semibold
+                      hover:gap-3 transition-all
+                    "
+                  >
+                    Details
+                    <FaArrowRight className="transition-transform group-hover/details:translate-x-1" />
+                  </button>
+                </div>
               </div>
             </div>
           ))}
