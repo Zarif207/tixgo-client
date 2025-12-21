@@ -7,7 +7,7 @@ import SocialLogin from "./SocialLogin";
 import { errorAlert, successAlert } from "../../Utils/swal";
 
 /* -------------------------------
-   Firebase Error Mapper (PRO TIP)
+   Firebase Error Mapper
 -------------------------------- */
 const getAuthErrorMessage = (err) => {
   if (!err?.code) return "Login failed. Please try again.";
@@ -38,96 +38,86 @@ const Login = () => {
   const location = useLocation();
   const [showPassword, setShowPassword] = useState(false);
 
-  // 🔁 redirect destination
+  // redirect path
   const from = location.state?.from?.pathname || "/";
 
-  // 🚫 Already logged in → redirect
+  // already logged in
   if (user) {
     return <Navigate to={from} replace />;
   }
 
-  /* -------------------------------
-     SUBMIT
-  -------------------------------- */
   const onSubmit = async (data) => {
     try {
       await signInUser(data.email, data.password);
 
-      await successAlert(
-        "Login Successful",
-        "Welcome back to TixGo"
-      );
+      await successAlert("Login Successful", "Welcome back to TixGo");
 
       navigate(from, { replace: true });
     } catch (err) {
-      errorAlert(
-        "Login Failed",
-        getAuthErrorMessage(err)
-      );
+      errorAlert("Login Failed", getAuthErrorMessage(err));
     }
   };
 
   return (
-    <div className="max-w-md mx-auto mt-14 p-8 rounded-xl shadow bg-base-100">
-      <h2 className="text-3xl font-bold text-center mb-6">
+    <div className="max-w-md mx-auto p-8 rounded-3xl shadow-xl bg-base-100">
+      <h2 className="text-4xl font-extrabold text-center mb-6">
         Login
       </h2>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-        {/* EMAIL */}
-        <input
-          {...register("email", {
-            required: "Email is required",
-          })}
-          type="email"
-          placeholder="Email"
-          className="input input-bordered w-full"
-        />
-        {errors.email && (
-          <p className="text-red-500 text-sm">
-            {errors.email.message}
-          </p>
-        )}
-
-        {/* PASSWORD */}
-        <div className="relative">
+        {/* Email */}
+        <div>
           <input
-            {...register("password", {
-              required: "Password is required",
-              minLength: {
-                value: 6,
-                message: "Password must be at least 6 characters",
-              },
-            })}
-            type={showPassword ? "text" : "password"}
-            placeholder="Password"
-            className="input input-bordered w-full pr-10"
+            {...register("email", { required: "Email is required" })}
+            type="email"
+            placeholder="Email"
+            className="input input-bordered w-full"
           />
-          <button
-            type="button"
-            onClick={() => setShowPassword(!showPassword)}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-xl"
-          >
-            {showPassword ?  <FiEye /> : <FiEyeOff />}
-          </button>
+          {errors.email && (
+            <p className="text-red-500 text-sm mt-1">
+              {errors.email.message}
+            </p>
+          )}
         </div>
-        {errors.password && (
-          <p className="text-red-500 text-sm">
-            {errors.password.message}
-          </p>
-        )}
 
-        <button className="btn btn-primary w-full">
+        {/* Password */}
+        <div>
+          <div className="relative">
+            <input
+              {...register("password", {
+                required: "Password is required",
+                minLength: {
+                  value: 6,
+                  message: "Password must be at least 6 characters",
+                },
+              })}
+              type={showPassword ? "text" : "password"}
+              placeholder="Password"
+              className="input input-bordered w-full pr-10"
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-xl"
+            >
+              {showPassword ? <FiEye /> : <FiEyeOff />}
+            </button>
+          </div>
+          {errors.password && (
+            <p className="text-red-500 text-sm mt-1">
+              {errors.password.message}
+            </p>
+          )}
+        </div>
+
+        <button className="btn btn-primary w-full text-lg">
           Login
         </button>
       </form>
 
       <p className="text-center mt-4">
         New here?{" "}
-        <Link
-          to="/auth/register"
-          className="text-primary font-medium"
-        >
+        <Link to="/auth/register" className="text-primary font-semibold">
           Register
         </Link>
       </p>
