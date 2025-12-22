@@ -1,4 +1,4 @@
-# 🎟️ Online Ticket Booking Platform (TixGo)
+# 🎟️ TixGo – Online Ticket Booking Platform (Frontend)
 
 ## 🔹 Project Purpose
 A full-stack MERN application where users can discover and book travel tickets (Bus, Train, Launch, Plane).  

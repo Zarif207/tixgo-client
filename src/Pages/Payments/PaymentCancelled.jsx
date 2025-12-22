@@ -1,11 +1,10 @@
-import React from "react";
 import { Link } from "react-router";
 import { FaTimesCircle } from "react-icons/fa";
 
 const PaymentCancelled = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-yellow-50 px-4">
-      <div className="bg-white shadow-lg rounded-xl p-8 max-w-md w-full text-center">
+      <div className="bg-white shadow-xl rounded-xl p-8 max-w-md w-full text-center">
         <FaTimesCircle className="text-yellow-500 text-6xl mx-auto mb-4" />
 
         <h2 className="text-2xl font-bold text-yellow-600 mb-2">
@@ -13,7 +12,7 @@ const PaymentCancelled = () => {
         </h2>
 
         <p className="text-gray-600 mb-6">
-          You cancelled the payment. No money was charged.
+          You cancelled the payment. No charge was made.
         </p>
 
         <div className="flex flex-col gap-3">
@@ -24,12 +23,7 @@ const PaymentCancelled = () => {
             Try Again
           </Link>
 
-          <Link
-            to="/"
-            className="border border-yellow-500 text-yellow-600 py-2 rounded hover:bg-yellow-50"
-          >
-            Go to Home
-          </Link>
+         
         </div>
       </div>
     </div>

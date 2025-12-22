@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import UseAxiosSecure from "../../../Hooks/UseAxiosSecure";
 import UseAuth from "../../../Hooks/UseAuth";
 
@@ -17,11 +17,9 @@ const Transaction = () => {
   useEffect(() => {
     if (!user?.email) return;
 
-    setLoading(true);
-
     axiosSecure
       .get(`/payments?email=${user.email}`)
-      .then((res) => setTransactions(res.data))
+      .then(res => setTransactions(res.data))
       .finally(() => setLoading(false));
   }, [user?.email, axiosSecure]);
 
@@ -33,68 +31,42 @@ const Transaction = () => {
     );
   }
 
-  if (transactions.length === 0) {
-    return (
-      <div className="p-6 text-center text-base-content/60">
-        No transactions found.
-      </div>
-    );
-  }
-
   return (
     <div className="p-6">
-      <h2 className="text-2xl font-semibold mb-6 text-base-content">
-        Transaction History
-      </h2>
+      <h2 className="text-2xl font-bold mb-6">Transaction History</h2>
 
-      <div className="overflow-x-auto rounded-xl border border-base-300">
-        <table className="min-w-full bg-base-100">
-          <thead className="bg-base-200">
-            <tr>
-              <th className="py-3 px-4 text-left text-sm font-medium text-base-content">
-                #
-              </th>
-              <th className="py-3 px-4 text-left text-sm font-medium text-base-content">
-                Transaction ID
-              </th>
-              <th className="py-3 px-4 text-left text-sm font-medium text-base-content">
-                Ticket
-              </th>
-              <th className="py-3 px-4 text-left text-sm font-medium text-base-content">
-                Amount
-              </th>
-              <th className="py-3 px-4 text-left text-sm font-medium text-base-content">
-                Paid At
-              </th>
-            </tr>
-          </thead>
-
-          <tbody>
-            {transactions.map((t, index) => (
-              <tr
-                key={t.transactionId}
-                className="border-b border-base-300 hover:bg-base-200 transition"
-              >
-                <td className="py-3 px-4 text-base-content">{index + 1}</td>
-
-                <td className="py-3 px-4 font-mono text-sm text-base-content/70 break-all">
-                  {t.transactionId}
-                </td>
-
-                <td className="py-3 px-4 text-base-content">{t.ticketTitle}</td>
-
-                <td className="py-3 px-4 font-semibold text-success">
-                  {usd.format(t.amount)}
-                </td>
-
-                <td className="py-3 px-4 text-sm text-base-content/60">
-                  {new Date(t.paidAt).toLocaleString()}
-                </td>
+      {transactions.length === 0 ? (
+        <p className="text-center text-gray-500">No transactions found</p>
+      ) : (
+        <div className="overflow-x-auto rounded-xl border">
+          <table className="table table-zebra w-full">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Transaction ID</th>
+                <th>Ticket</th>
+                <th>Amount</th>
+                <th>Paid At</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+            </thead>
+            <tbody>
+              {transactions.map((t, i) => (
+                <tr key={t.transactionId}>
+                  <td>{i + 1}</td>
+                  <td className="font-mono text-sm break-all">
+                    {t.transactionId}
+                  </td>
+                  <td>{t.ticketTitle}</td>
+                  <td className="text-green-600 font-semibold">
+                    {usd.format(t.amount)}
+                  </td>
+                  <td>{new Date(t.paidAt).toLocaleString()}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   );
 };
