@@ -13,11 +13,11 @@ import {
 } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
 import { Link } from "react-router";
+import logoimg from "../../assets/web-icon.png";
 
 const Footer = () => {
   return (
     <footer className="mt-24">
-      
       <div
         className="
           bg-gradient-to-br from-base-300 via-base-200 to-base-300
@@ -33,10 +33,13 @@ const Footer = () => {
             gap-12
           "
         >
-         
           <div>
             <div className="flex items-center gap-2 text-2xl font-bold pb-5">
-              <FaPlaneDeparture className="text-primary" />
+              <img
+                src={logoimg}
+                alt="TixGo Logo"
+                className="w-8 h-8 object-contain"
+              />
               TixGo
             </div>
             <p className="text-base-content/70 leading-relaxed max-w-sm">
@@ -45,7 +48,6 @@ const Footer = () => {
             </p>
           </div>
 
-        
           <div>
             <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
             <ul className="space-y-3">
@@ -71,7 +73,6 @@ const Footer = () => {
             </ul>
           </div>
 
-         
           <div>
             <h3 className="text-lg font-semibold mb-4">Contact Info</h3>
             <ul className="space-y-4 text-base-content/70">
@@ -130,7 +131,6 @@ const Footer = () => {
         </div>
       </div>
 
-     
       <div className="bg-base-300 border-t border-base-content/10">
         <div
           className="

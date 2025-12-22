@@ -4,11 +4,8 @@ import { FaPlaneDeparture } from "react-icons/fa";
 import { FiSun, FiMoon } from "react-icons/fi";
 import UseAuth from "../../Hooks/UseAuth";
 import useTheme from "../../Hooks/UseTheme";
-import {
-  confirmAction,
-  successAlert,
-  errorAlert,
-} from "../../Utils/swal";
+import { confirmAction, successAlert, errorAlert } from "../../Utils/swal";
+import logoimg from "../../assets/web-icon.png";
 
 const Navbar = () => {
   const { user, signOutUser } = UseAuth();
@@ -67,17 +64,19 @@ const Navbar = () => {
             </ul>
           </div>
 
-       
           <Link
             to="/"
             className="flex items-center gap-2 text-xl sm:text-2xl font-bold"
           >
-            <FaPlaneDeparture className="text-primary text-2xl" />
+            <img
+              src={logoimg}
+              alt="TixGo Logo"
+              className="w-8 h-8 object-contain"
+            />
             TixGo
           </Link>
         </div>
 
-       
         <div className="navbar-center hidden md:flex">
           <ul className="menu menu-horizontal gap-1 lg:gap-2">
             <li>
@@ -98,13 +97,8 @@ const Navbar = () => {
           </ul>
         </div>
 
-       
         <div className="navbar-end gap-2 sm:gap-3">
-        
-          <button
-            onClick={toggleTheme}
-            className="btn btn-ghost btn-circle"
-          >
+          <button onClick={toggleTheme} className="btn btn-ghost btn-circle">
             {theme === "dark" ? <FiSun /> : <FiMoon />}
           </button>
 
@@ -159,10 +153,7 @@ const Navbar = () => {
                   <Link to="/nav-profile">My Profile</Link>
                 </li>
                 <li>
-                  <button
-                    onClick={handleLogout}
-                    className="text-red-500"
-                  >
+                  <button onClick={handleLogout} className="text-red-500">
                     Logout
                   </button>
                 </li>
