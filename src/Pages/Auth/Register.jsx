@@ -24,34 +24,26 @@ const Register = () => {
 
   const from = location.state?.from?.pathname || "/";
 
-  // already logged in
+ 
   if (user) {
     return <Navigate to={from} replace />;
   }
 
   const onSubmit = async (data) => {
     try {
-      // create user
       await userRegister(data.email, data.password);
-
-      // upload image to imgbb
       const formData = new FormData();
       formData.append("image", data.photo[0]);
 
       const uploadURL = `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_IMGBB_API_KEY}`;
       const imgRes = await axios.post(uploadURL, formData);
       const photoURL = imgRes.data.data.url;
-
-      // update profile
       await updateUserProfile({
         displayName: data.name,
         photoURL,
       });
 
-      // refresh token
       await auth.currentUser.getIdToken(true);
-
-      // save user to DB
       await axiosSecure.post("/users", {
         name: data.name,
         email: data.email,

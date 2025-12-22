@@ -32,7 +32,7 @@ const Border = () => {
         "
       />
 
-      {/* Main Line */}
+      
       <div
         ref={lineRef}
         className="
@@ -45,7 +45,7 @@ const Border = () => {
         "
       />
 
-      {/* Center Dot */}
+     
       <div
         className="
           absolute top-1/2 -translate-y-1/2

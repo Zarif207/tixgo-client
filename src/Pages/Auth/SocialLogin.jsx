@@ -13,10 +13,7 @@ const SocialLogin = () => {
     try {
       const result = await signInWithGoogle();
       const user = result.user;
-
-      // Force token refresh
       await auth.currentUser.getIdToken(true);
-
       await axiosSecure.post("/users", {
         name: user.displayName,
         email: user.email,
@@ -31,27 +28,37 @@ const SocialLogin = () => {
   };
 
   return (
-    <div className="text-center mt-4 pb-6 sm:pb-8 px-4">
-      <p className="mb-3 text-sm sm:text-base">or</p>
+    <div className="text-center mt-6">
+      <div className="flex items-center gap-3 mb-4">
+        <div className="flex-1 h-px bg-base-300"></div>
+        <span className="text-sm text-base-content/60">OR</span>
+        <div className="flex-1 h-px bg-base-300"></div>
+      </div>
 
       <button
         onClick={handleGoogleSignIn}
         className="
-          btn bg-white text-black border
+          w-full
           flex items-center justify-center gap-3
-          w-full sm:w-[320px] md:w-[340px]
-          mx-auto
+          py-2.5
+          rounded-xl
+          border border-base-300
+          bg-white
+          hover:bg-blue-50
+          transition
+          font-medium
         "
       >
-        <svg width="16" height="16" viewBox="0 0 512 512">
+        <svg width="18" height="18" viewBox="0 0 512 512">
           <path fill="#fff" d="M0 0h512v512H0z" />
           <path fill="#34a853" d="M153 292c30 82 118 95 171 60h62v48A192 192 0 0190 341" />
           <path fill="#4285f4" d="M386 400a140 175 0 0053-179H260v74h102q-7 37-38 57" />
           <path fill="#fbbc02" d="M90 341a208 200 0 010-171l63 49q-12 37 0 73" />
           <path fill="#ea4335" d="M153 219c22-69 116-109 179-50l55-54c-78-75-230-72-297 55" />
         </svg>
-        <span className="text-sm sm:text-base font-medium">
-          Login with Google
+
+        <span className="text-sm sm:text-base text-gray-700">
+          Continue with Google
         </span>
       </button>
     </div>

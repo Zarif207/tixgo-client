@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { FaSearch, FaBusAlt, FaTrain, FaShip, FaPlane } from "react-icons/fa";
 
-/* ================= TRAVEL BANNERS ================= */
+
 const banners = [
   {
     image:
@@ -44,7 +44,7 @@ const HeroSection = () => {
 
   return (
     <section className="relative h-screen overflow-hidden bg-white dark:bg-gray-900">
-      {/* ================= IMAGE SLIDER ================= */}
+    
       <div className="absolute inset-0">
         {banners.map((banner, i) => (
           <div
@@ -62,25 +62,25 @@ const HeroSection = () => {
         ))}
       </div>
 
-      {/* ================= LIGHT OVERLAY ================= */}
+      
       <div className="absolute inset-0 bg-white/40 dark:bg-gray-900/50" />
 
-      {/* ================= CONTENT ================= */}
+     
       <div className="relative z-10 h-full flex items-center">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
           <div className="max-w-3xl mx-auto text-center">
-            {/* Main Heading */}
+           
             <h1 className="text-5xl sm:text-6xl md:text-7xl font-bold text-gray-900 dark:text-white mb-6">
               Book Your Journey
             </h1>
 
-            {/* Description */}
+            
             <p className="text-lg sm:text-xl text-gray-700 dark:text-gray-300 mb-8 max-w-2xl mx-auto">
               Find and book bus, train, launch, and flight tickets from trusted
               vendors
             </p>
 
-            {/* Search Button */}
+           
             <button
               className="
             inline-flex items-center gap-3
@@ -97,7 +97,7 @@ const HeroSection = () => {
               Search Tickets
             </button>
 
-            {/* Travel Mode Icons */}
+          
             <div className="flex gap-8 justify-center mt-12">
               {travelModes.map((mode, i) => (
                 <div key={i} className="flex flex-col items-center gap-2">
@@ -112,7 +112,7 @@ const HeroSection = () => {
             </div>
           </div>
 
-          {/* ================= SLIDE INDICATORS ================= */}
+         
           <div className="flex justify-center gap-2 mt-16">
             {banners.map((_, i) => (
               <button

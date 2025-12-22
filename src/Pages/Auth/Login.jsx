@@ -6,9 +6,7 @@ import UseAuth from "../../Hooks/UseAuth";
 import SocialLogin from "./SocialLogin";
 import { errorAlert, successAlert } from "../../Utils/swal";
 
-/* -------------------------------
-   Firebase Error Mapper
--------------------------------- */
+
 const getAuthErrorMessage = (err) => {
   if (!err?.code) return "Login failed. Please try again.";
 
@@ -38,10 +36,8 @@ const Login = () => {
   const location = useLocation();
   const [showPassword, setShowPassword] = useState(false);
 
-  // redirect path
+  
   const from = location.state?.from?.pathname || "/";
-
-  // already logged in
   if (user) {
     return <Navigate to={from} replace />;
   }

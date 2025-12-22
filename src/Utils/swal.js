@@ -1,6 +1,6 @@
 import Swal from "sweetalert2";
 
-/* ---------------- Base Dark + Blur Theme ---------------- */
+
 const swalBase = {
   background: "rgba(17, 24, 39, 0.85)", // transparent dark
   color: "#e5e7eb",
@@ -11,13 +11,13 @@ const swalBase = {
   `,
 };
 
-/* ---------------- Themed Instance ---------------- */
+
 export const themedSwal = Swal.mixin({
   ...swalBase,
   buttonsStyling: true,
 });
 
-/* ---------------- Helpers ---------------- */
+
 export const confirmAction = (options) =>
   themedSwal.fire({
     icon: "warning",

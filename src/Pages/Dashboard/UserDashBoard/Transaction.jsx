@@ -25,7 +25,6 @@ const Transaction = () => {
       .finally(() => setLoading(false));
   }, [user?.email, axiosSecure]);
 
-  /* ================= UI STATES ================= */
   if (loading) {
     return (
       <div className="flex justify-center items-center min-h-screen">
@@ -42,7 +41,6 @@ const Transaction = () => {
     );
   }
 
-  /* ================= UI ================= */
   return (
     <div className="p-6">
       <h2 className="text-2xl font-semibold mb-6 text-base-content">

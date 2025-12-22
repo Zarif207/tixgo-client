@@ -7,8 +7,6 @@ const ManageUsers = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  /* ---------------- Fetch Users ---------------- */
-
   const fetchUsers = async () => {
     try {
       setLoading(true);
@@ -25,8 +23,6 @@ const ManageUsers = () => {
   useEffect(() => {
     fetchUsers();
   }, []);
-
-  /* ---------------- Make Admin ---------------- */
 
   const makeAdmin = async (id) => {
     const res = await confirmAction({
@@ -46,8 +42,6 @@ const ManageUsers = () => {
     }
   };
 
-  /* ---------------- Make Vendor ---------------- */
-
   const makeVendor = async (id) => {
     const res = await confirmAction({
       title: "Make Vendor?",
@@ -65,8 +59,6 @@ const ManageUsers = () => {
       errorAlert("Error", "Failed to make vendor");
     }
   };
-
-  /* ---------------- Mark Fraud ---------------- */
 
   const markFraud = async (id) => {
     const res = await themedSwal.fire({
@@ -89,8 +81,6 @@ const ManageUsers = () => {
     }
   };
 
-  /* ---------------- Loading ---------------- */
-
   if (loading) {
     return (
       <div className="flex justify-center items-center min-h-[55vh]">
@@ -98,8 +88,6 @@ const ManageUsers = () => {
       </div>
     );
   }
-
-  /* ---------------- UI ---------------- */
 
   return (
     <div className="p-6 bg-base-100 min-h-screen">

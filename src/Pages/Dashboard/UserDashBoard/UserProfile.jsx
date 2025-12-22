@@ -13,7 +13,7 @@ const UserProfile = () => {
     isError,
   } = useQuery({
     queryKey: ["userProfile"],
-    enabled: !!user, // wait until auth is ready
+    enabled: !!user,
     queryFn: async () => {
       const res = await axiosSecure.get("/users/profile");
       return res.data;

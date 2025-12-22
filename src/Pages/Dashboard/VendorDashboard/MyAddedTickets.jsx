@@ -12,8 +12,6 @@ const MyAddedTickets = () => {
 
   const [selectedTicket, setSelectedTicket] = useState(null);
   const [formData, setFormData] = useState({});
-
-  /* ---------------- FETCH ---------------- */
   const {
     data: tickets = [],
     isLoading,
@@ -28,7 +26,7 @@ const MyAddedTickets = () => {
     },
   });
 
-  /* ---------------- DELETE ---------------- */
+
   const handleDelete = (id) => {
     themedSwal.fire({
       title: "Delete Ticket?",
@@ -51,7 +49,7 @@ const MyAddedTickets = () => {
     });
   };
 
-  /* ---------------- UPDATE ---------------- */
+  
   const openUpdateModal = (ticket) => {
     setSelectedTicket(ticket);
     setFormData({
@@ -92,7 +90,7 @@ const MyAddedTickets = () => {
     }
   };
 
-  /* ---------------- STATES ---------------- */
+  
   if (authLoading || isLoading) {
     return (
       <div className="flex justify-center items-center min-h-[60vh]">
@@ -109,7 +107,7 @@ const MyAddedTickets = () => {
     return <p className="p-6 text-center opacity-70">No tickets found</p>;
   }
 
-  /* ---------------- UI ---------------- */
+  
   return (
     <div className="p-4 md:p-6 h-[calc(100vh-120px)] overflow-y-auto scroll-smooth">
       <h2 className="text-3xl font-bold mb-6">My Added Tickets</h2>
@@ -136,7 +134,7 @@ const MyAddedTickets = () => {
                   {ticket.title}
                 </h3>
 
-                {/* STATUS BADGE */}
+               
                 <span
                   className={`w-fit px-3 py-1 rounded-full text-xs font-medium mt-1
                     ${
@@ -193,7 +191,7 @@ const MyAddedTickets = () => {
         })}
       </div>
 
-      {/* ---------------- UPDATE MODAL ---------------- */}
+     
       {selectedTicket && (
         <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center px-4">
           <div className="bg-base-100 rounded-xl shadow-lg w-full max-w-lg p-6">

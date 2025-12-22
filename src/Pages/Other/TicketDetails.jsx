@@ -21,7 +21,7 @@ const TicketDetails = () => {
   const [countdown, setCountdown] = useState("");
   const [isExpired, setIsExpired] = useState(false);
 
-  // ================= FETCH =================
+
   const fetchTicket = async () => {
     try {
       const res = await axiosSecure.get(`/tickets/${id}`);
@@ -37,7 +37,7 @@ const TicketDetails = () => {
     fetchTicket();
   }, [id]);
 
-  // ================= COUNTDOWN =================
+ 
   useEffect(() => {
     if (!ticket?.departure) return;
 
@@ -64,7 +64,7 @@ const TicketDetails = () => {
     return () => clearInterval(interval);
   }, [ticket]);
 
-  // ================= BOOK =================
+  
   const handleBooking = async (e) => {
     e.preventDefault();
 
@@ -139,9 +139,9 @@ const TicketDetails = () => {
         </div>
       </div>
 
-      {/* CONTENT */}
+    
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-10">
-        {/* LEFT INFO */}
+        
         <div className="lg:col-span-2 space-y-6">
           <div className="grid sm:grid-cols-2 gap-4">
             <InfoCard
@@ -174,7 +174,7 @@ const TicketDetails = () => {
           </div>
         </div>
 
-        {/* RIGHT BOOK */}
+       
         <div className="card bg-base-100 border border-base-300 shadow-xl sticky top-28">
           <div className="card-body space-y-4">
             <h3 className="text-xl font-bold">Booking Summary</h3>
@@ -238,7 +238,7 @@ const TicketDetails = () => {
   );
 };
 
-/* ================= REUSABLE INFO CARD ================= */
+
 const InfoCard = ({ icon, label, value }) => (
   <div className="card bg-base-100 border border-base-300 shadow-sm">
     <div className="card-body">

@@ -18,7 +18,7 @@ import {
 import UseAuth from "../Hooks/UseAuth";
 import UseRole from "../Hooks/UseRole";
 
-/* ===================== REUSABLE NAV ITEM ===================== */
+
 const DashboardNavLink = ({ to, icon, label }) => {
   const Icon = icon;
   return (
@@ -41,7 +41,6 @@ const DashboardNavLink = ({ to, icon, label }) => {
   );
 };
 
-/* ===================== SIDEBAR CONTENT ===================== */
 const SidebarContent = ({ role, user }) => (
   <>
     <h2 className="text-2xl font-bold mb-6">Dashboard</h2>
@@ -93,7 +92,6 @@ const SidebarContent = ({ role, user }) => (
   </>
 );
 
-/* ===================== LAYOUT ===================== */
 const DashboardLayout = () => {
   const { user, loading } = UseAuth();
   const { role, roleLoading } = UseRole();
@@ -120,12 +118,12 @@ const DashboardLayout = () => {
   return (
     <div className="min-h-screen bg-base-200 text-base-content">
 
-      {/* ===== MOBILE DRAWER ===== */}
+     
       <div className="drawer md:hidden">
         <input id="dashboard-drawer" type="checkbox" className="drawer-toggle" />
 
         <div className="drawer-content flex flex-col">
-          {/* Mobile Top Bar */}
+   
           <div className="navbar bg-base-100 shadow-sm">
             <label
               htmlFor="dashboard-drawer"
@@ -149,7 +147,7 @@ const DashboardLayout = () => {
         </div>
       </div>
 
-      {/* ===== DESKTOP LAYOUT ===== */}
+     
       <div className="hidden md:flex min-h-screen">
         <aside className="w-72 bg-base-100 border-r border-base-300 p-5">
           <SidebarContent role={role} user={user} />

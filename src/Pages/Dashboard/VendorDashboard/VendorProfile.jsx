@@ -8,8 +8,6 @@ const VendorProfile = () => {
   return (
     <div className="max-w-xl mx-auto mt-8">
       <div className="card bg-base-100 shadow-xl p-6">
-
-        {/* PROFILE HEADER */}
         <div className="flex flex-col items-center text-center">
           <div className="relative">
             <img

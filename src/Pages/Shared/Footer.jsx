@@ -17,7 +17,7 @@ import { Link } from "react-router";
 const Footer = () => {
   return (
     <footer className="mt-24">
-      {/* ================= MAIN FOOTER ================= */}
+      
       <div
         className="
           bg-gradient-to-br from-base-300 via-base-200 to-base-300
@@ -33,7 +33,7 @@ const Footer = () => {
             gap-12
           "
         >
-          {/* ================= COLUMN 1 ================= */}
+         
           <div>
             <div className="flex items-center gap-2 text-2xl font-bold pb-5">
               <FaPlaneDeparture className="text-primary" />
@@ -45,7 +45,7 @@ const Footer = () => {
             </p>
           </div>
 
-          {/* ================= COLUMN 2 ================= */}
+        
           <div>
             <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
             <ul className="space-y-3">
@@ -71,7 +71,7 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* ================= COLUMN 3 ================= */}
+         
           <div>
             <h3 className="text-lg font-semibold mb-4">Contact Info</h3>
             <ul className="space-y-4 text-base-content/70">
@@ -130,7 +130,7 @@ const Footer = () => {
         </div>
       </div>
 
-      {/* ================= BOTTOM BAR ================= */}
+     
       <div className="bg-base-300 border-t border-base-content/10">
         <div
           className="

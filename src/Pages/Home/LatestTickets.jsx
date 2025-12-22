@@ -61,7 +61,7 @@ const LatestTickets = () => {
                 overflow-hidden
               "
             >
-              {/* IMAGE */}
+             
               <div className="h-48 overflow-hidden">
                 <img
                   src={ticket.image}
@@ -74,7 +74,7 @@ const LatestTickets = () => {
                 />
               </div>
 
-              {/* TRANSPORT BADGE */}
+             
               <div
                 className="
                   absolute top-4 left-4
@@ -88,7 +88,7 @@ const LatestTickets = () => {
                 {ticket.transport}
               </div>
 
-              {/* CONTENT */}
+             
               <div className="p-5 pb-14">
                 <h3 className="text-lg font-bold line-clamp-2">
                   {ticket.title}
@@ -114,7 +114,7 @@ const LatestTickets = () => {
                   </p>
                 </div>
 
-                {/* PERKS (HORIZONTAL STYLE) */}
+               
                 {ticket.perks?.length > 0 && (
                   <div className="mt-3 flex flex-wrap gap-x-2 text-xs text-base-content/70">
                     {ticket.perks.slice(0, 3).map((perk, i) => (
@@ -127,7 +127,7 @@ const LatestTickets = () => {
                 )}
               </div>
 
-              {/* DETAILS BUTTON */}
+             
               <Link
                 to={`/ticket-details/${ticket._id}`}
                 className="

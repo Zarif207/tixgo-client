@@ -8,8 +8,6 @@ const RequestedBookings = () => {
   const axiosSecure = UseAxiosSecure();
   const { user } = UseAuth();
   const vendorEmail = user?.email;
-
-  /* ---------------- FETCH BOOKINGS ---------------- */
   const {
     data: requests = [],
     isLoading,
@@ -25,7 +23,6 @@ const RequestedBookings = () => {
     },
   });
 
-  /* ---------------- ACCEPT ---------------- */
   const handleAccept = async (id) => {
     const confirm = await themedSwal.fire({
       title: "Accept booking?",
@@ -56,7 +53,6 @@ const RequestedBookings = () => {
     }
   };
 
-  /* ---------------- REJECT ---------------- */
   const handleReject = async (id) => {
     const confirm = await themedSwal.fire({
       title: "Reject booking?",
@@ -83,7 +79,7 @@ const RequestedBookings = () => {
     }
   };
 
-  /* ---------------- STATES ---------------- */
+  
   if (isLoading) {
     return (
       <div className="flex justify-center py-20">
@@ -108,7 +104,6 @@ const RequestedBookings = () => {
     );
   }
 
-  /* ---------------- UI ---------------- */
   return (
     <div className="p-4 md:p-6 h-[calc(100vh-120px)] overflow-y-auto scroll-smooth">
       <h2 className="text-3xl font-bold mb-6">Requested Bookings</h2>
@@ -134,7 +129,7 @@ const RequestedBookings = () => {
                 <td className="text-center">{req.quantity}</td>
                 <td className="text-center">${req.unitPrice * req.quantity}</td>
 
-                {/* STATUS */}
+              
                 <td className="text-center">
                   <span
                     className={`badge text-white ${
@@ -156,8 +151,6 @@ const RequestedBookings = () => {
                       : "Rejected"}
                   </span>
                 </td>
-
-                {/* ACTIONS */}
                 <td className="flex justify-center gap-2">
                   <button
                     disabled={req.status !== "pending"}

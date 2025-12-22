@@ -15,22 +15,16 @@ const AddTicket = () => {
   const axiosSecure = UseAxiosSecure();
 
   const { register, handleSubmit, reset } = useForm();
-
   const imageKey = import.meta.env.VITE_IMGBB_API_KEY;
-
-  /* ---------------- SUBMIT ---------------- */
   const onSubmit = async (data) => {
     loadingAlert("Adding ticket...");
 
     try {
-      /* ---------- Image Validation ---------- */
       const imgFile = data.image?.[0];
       if (!imgFile || !imgFile.type.startsWith("image/")) {
         themedSwal.close();
         return errorAlert("Invalid Image", "Please upload a valid image file");
       }
-
-      /* ---------- Upload Image ---------- */
       const formData = new FormData();
       formData.append("image", imgFile);
 
@@ -43,8 +37,6 @@ const AddTicket = () => {
       }
 
       const imageURL = imgRes.data.data.display_url;
-
-      /* ---------- Ticket Payload ---------- */
       const ticketInfo = {
         title: data.title,
         from: data.from,
@@ -82,7 +74,6 @@ const AddTicket = () => {
     }
   };
 
-  /* ---------------- UI ---------------- */
   return (
     <div className="max-w-3xl mx-auto px-4 py-8">
       <div className="card bg-base-100 shadow-xl">
@@ -99,7 +90,7 @@ const AddTicket = () => {
               placeholder="Ticket title"
             />
 
-            {/* From / To */}
+            {/* From */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <input
                 {...register("from", { required: true })}
@@ -125,7 +116,7 @@ const AddTicket = () => {
               <option>Launch</option>
             </select>
 
-            {/* Price / Quantity */}
+            {/* Price */}
             <div className="grid grid-cols-2 gap-4">
               <input
                 type="number"

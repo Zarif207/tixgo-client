@@ -1,57 +1,41 @@
 import { createBrowserRouter } from "react-router";
 
-// ================== ROUTE GUARDS ==================
+
 import PrivateRoute from "../Routes/PrivateRoute";
 import AdminRoute from "../Routes/AdminRoute";
 import VendorRoute from "../Routes/VendorRoute";
 import UserRoute from "../Routes/UserRoute";
-
-// ================== LAYOUTS ==================
 import RootLayout from "../Layouts/RootLayout";
 import AuthLayout from "../Layouts/AuthLayout";
 import DashboardLayout from "../Layouts/DashboardLayout";
 
-// ================== PAGES ==================
 
-// ----- Home / Public -----
+
+
 import Home from "../Pages/Home/Home";
 import AllTickets from "../Pages/Other/AllTickets";
 import TicketDetails from "../Pages/Other/TicketDetails";
-
-// ----- Auth -----
 import Login from "../Pages/Auth/Login";
 import Register from "../Pages/Auth/Register";
-
-// ----- Payments -----
 import PaymentSuccess from "../Pages/Payments/PaymentSuccess";
 import PaymentCancelled from "../Pages/Payments/PaymentCancelled";
 import PaymentFailed from "../Pages/Payments/PaymentFailed";
-
-// ----- Admin -----
 import AdminProfile from "../Pages/Dashboard/AdminDashboard/AdminProfile";
 import ManageTickets from "../Pages/Dashboard/AdminDashboard/ManageTickets";
 import ManageUsers from "../Pages/Dashboard/AdminDashboard/ManageUsers";
 import AdvertiseTickets from "../Pages/Dashboard/AdminDashboard/AdvertiseTickets";
-
-// ----- User -----
 import UserProfile from "../Pages/Dashboard/UserDashBoard/UserProfile";
 import MyBookedTickets from "../Pages/Dashboard/UserDashBoard/MyBookedTickets";
 import Transaction from "../Pages/Dashboard/UserDashBoard/Transaction";
-
-// ----- Vendor -----
 import VendorProfile from "../Pages/Dashboard/VendorDashboard/VendorProfile";
 import AddTicket from "../Pages/Dashboard/VendorDashboard/AddTicket";
 import MyAddedTickets from "../Pages/Dashboard/VendorDashboard/MyAddedTickets";
 import RequestedBookings from "../Pages/Dashboard/VendorDashboard/RequestedBookings";
 import Revenue from "../Pages/Dashboard/VendorDashboard/Revenue";
-
-// ----- Other -----
 import About from "../Pages/Other/About";
 import ContactUs from "../Pages/Other/ContactUs";
 import ErrorPage from "../Pages/Other/ErrorPage";
 import NavProfile from "../Pages/Other/NavProfile";
-
-// ================== ROUTER ==================
 
 export const router = createBrowserRouter([
   // -------------------------------------------------
@@ -132,7 +116,6 @@ export const router = createBrowserRouter([
       </PrivateRoute>
     ),
     children: [
-      // ===== ADMIN =====
       {
         path: "admin/profile",
         element: (

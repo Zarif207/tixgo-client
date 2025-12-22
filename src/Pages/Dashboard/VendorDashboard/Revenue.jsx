@@ -41,7 +41,6 @@ const Revenue = () => {
       .finally(() => setLoading(false));
   }, [axiosSecure, role, roleLoading]);
 
-  /* ================= LOADING ================= */
 
   if (loading || !summary) {
     return (
@@ -66,7 +65,6 @@ const Revenue = () => {
           : "Vendor Revenue Overview"}
       </h2>
 
-      {/* ================= SUMMARY ================= */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         <Stat
           title="Total Revenue"
@@ -87,7 +85,6 @@ const Revenue = () => {
         />
       </div>
 
-      {/* ================= CHARTS ================= */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 pt-10 pb-10">
         <Donut
           title="Total Revenue"
@@ -104,8 +101,6 @@ const Revenue = () => {
   );
 };
 
-/* ================= STAT CARD ================= */
-
 const Stat = ({ title, value, color }) => (
   <div className="bg-base-200 p-6 rounded-2xl shadow-sm hover:shadow-md transition">
     <h3 className="text-sm uppercase tracking-wide opacity-70">{title}</h3>
@@ -114,8 +109,6 @@ const Stat = ({ title, value, color }) => (
     </p>
   </div>
 );
-
-/* ================= DONUT CHART ================= */
 
 const Donut = ({ title, data, colors }) => {
   const isDark = document.documentElement.getAttribute("data-theme") === "dark";
@@ -143,7 +136,7 @@ const Donut = ({ title, data, colors }) => {
             ))}
           </Pie>
 
-          {/* ✅ TOOLTIP FIX */}
+   
           <Tooltip
             contentStyle={{
               backgroundColor: tooltipBg,
@@ -154,8 +147,6 @@ const Donut = ({ title, data, colors }) => {
             itemStyle={{ color: textColor }}
             labelStyle={{ color: textColor }}
           />
-
-          {/* ✅ LEGEND FIX */}
           <Legend
             wrapperStyle={{
               color: textColor,

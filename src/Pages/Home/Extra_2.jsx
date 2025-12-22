@@ -40,7 +40,7 @@ const Extra_2 = () => {
 
   return (
     <section className="bg-base-100 py-24 px-6 border-y border-base-300">
-      {/* Header */}
+      
       <div className="max-w-3xl mx-auto text-center mb-16">
         <h2 className="text-4xl md:text-5xl font-extrabold mb-6 tracking-tight">
           Why <span className="text-primary">Choose</span> Us?
@@ -51,7 +51,7 @@ const Extra_2 = () => {
         </p>
       </div>
 
-      {/* FAQ */}
+      
       <div className="max-w-4xl mx-auto space-y-6">
         {faqs.map((item) => {
           const Icon = item.icon;

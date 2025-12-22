@@ -42,7 +42,7 @@ const Advertisement = () => {
           </p>
         </div>
 
-        {/* GRID */}
+        
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
           {ads.map((ticket) => (
             <div
@@ -58,7 +58,7 @@ const Advertisement = () => {
                 flex flex-col overflow-hidden
               "
             >
-              {/* IMAGE */}
+             
               <div className="relative">
                 <img
                   src={ticket.image}
@@ -70,23 +70,23 @@ const Advertisement = () => {
                   "
                 />
 
-                {/* GRADIENT OVERLAY */}
+               
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
 
-                {/* PRICE */}
+              
                 <div className="absolute bottom-4 left-4 bg-primary text-primary-content px-4 py-1 rounded-full text-sm font-bold shadow">
                   ${ticket.price} / ticket
                 </div>
               </div>
 
-              {/* CONTENT */}
+            
               <div className="p-6 flex flex-col flex-grow">
-                {/* TITLE */}
+               
                 <h3 className="text-xl font-semibold mb-1">
                   {ticket.title}
                 </h3>
 
-                {/* META */}
+              
                 <div className="flex items-center justify-between text-sm text-base-content/70 mb-3">
                   <span>
                     Qty:{" "}
@@ -101,7 +101,7 @@ const Advertisement = () => {
                   </span>
                 </div>
 
-                {/* PERKS */}
+               
                 <div className="space-y-2 mb-6">
                   {(ticket.perks || []).slice(0, 3).map((perk, i) => (
                     <p
@@ -116,7 +116,7 @@ const Advertisement = () => {
                   ))}
                 </div>
 
-                {/* DETAILS BUTTON */}
+                
                 <div className="mt-auto flex justify-end">
                   <button
                     onClick={() =>
@@ -137,7 +137,7 @@ const Advertisement = () => {
           ))}
         </div>
 
-        {/* EMPTY STATE */}
+        
         {ads.length === 0 && (
           <p className="text-center text-base-content/60 mt-12">
             No advertised tickets available at the moment.

@@ -7,7 +7,6 @@ const AdvertiseTickets = () => {
   const axiosSecure = UseAxiosSecure();
   const qc = useQueryClient();
 
-  /* ---------------- FETCH APPROVED TICKETS ---------------- */
   const { data: tickets = [], isLoading } = useQuery({
     queryKey: ["approvedTickets"],
     queryFn: async () => {
@@ -18,7 +17,6 @@ const AdvertiseTickets = () => {
     },
   });
 
-  /* ---------------- TOGGLE MUTATION ---------------- */
   const toggleMutation = useMutation({
     mutationFn: async ({ id, advertise }) => {
       return axiosSecure.patch(`/tickets/${id}/advertise`, {
@@ -44,7 +42,6 @@ const AdvertiseTickets = () => {
     },
   });
 
-  /* ---------------- HANDLE TOGGLE ---------------- */
   const onToggle = (ticket) => {
     const advertisedCount = tickets.filter((t) => t.advertised).length;
 
@@ -77,7 +74,6 @@ const AdvertiseTickets = () => {
       });
   };
 
-  /* ---------------- LOADING ---------------- */
   if (isLoading) {
     return (
       <div className="flex justify-center items-center min-h-[60vh]">
@@ -86,16 +82,15 @@ const AdvertiseTickets = () => {
     );
   }
 
-  /* ---------------- UI ---------------- */
   return (
     <div className="p-6 bg-base-100 min-h-screen">
       <h2 className="text-xl font-semibold mb-5">
         Advertise Tickets
       </h2>
 
-      <div className="overflow-x-auto rounded-lg border border-base-300">
+     <div className="overflow-x-auto overflow-y-auto max-h-[calc(100vh-220px)] rounded-lg border border-base-300">
         <table className="w-full text-sm">
-          <thead className="bg-base-200">
+          <thead className="bg-base-200 sticky top-0 z-10">
             <tr>
               <th className="p-3 text-left">#</th>
               <th className="p-3 text-left">Title</th>

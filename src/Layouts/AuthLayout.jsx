@@ -16,7 +16,7 @@ const AuthLayout = () => {
 
       <div className="flex-1 grid grid-cols-1 lg:grid-cols-2 border-rounded-3xl overflow-hidden m-6 shadow-lg">
 
-        {/* LEFT SECTION */}
+        {/* LEFT */}
         <div
           className="
             hidden lg:flex items-center justify-center
@@ -27,14 +27,14 @@ const AuthLayout = () => {
           <div className="max-w-lg space-y-10 text-center">
 
             <h2 className="text-4xl font-extrabold">
-              Welcome to <span className="text-primary">TixGo</span>
+              Start your journey with <span className="text-primary">TixGo</span>
             </h2>
 
             <p className="text-base-content/70 text-lg">
               Book tickets easily from trusted vendors worldwide.
             </p>
 
-            {/* Icons */}
+            
             <div className="grid grid-cols-4 gap-6">
               {[FaBusAlt, FaTrain, FaShip, FaPlane].map((Icon, i) => (
                 <div
@@ -52,7 +52,7 @@ const AuthLayout = () => {
           </div>
         </div>
 
-        {/* RIGHT SECTION */}
+        {/* RIGHT */}
         <div className="flex items-center justify-center px-4 py-12">
           <div className="w-full max-w-md">
             <div

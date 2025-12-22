@@ -13,8 +13,6 @@ const ManageTickets = () => {
   const axiosSecure = UseAxiosSecure();
   const qc = useQueryClient();
 
-  /* ---------------- FETCH PENDING TICKETS ---------------- */
-
   const { data: tickets = [], isLoading } = useQuery({
     queryKey: ["tickets", "pending"],
     queryFn: async () => {
@@ -24,8 +22,6 @@ const ManageTickets = () => {
       return res.data;
     },
   });
-
-  /* ---------------- APPROVE ---------------- */
 
   const approveMutation = useMutation({
     mutationFn: (id) => axiosSecure.patch(`/tickets/${id}/approve`),
@@ -47,8 +43,6 @@ const ManageTickets = () => {
       }),
   });
 
-  /* ---------------- REJECT ---------------- */
-
   const rejectMutation = useMutation({
     mutationFn: (id) => axiosSecure.patch(`/tickets/${id}/reject`),
     onSuccess: () => {
@@ -69,8 +63,6 @@ const ManageTickets = () => {
       }),
   });
 
-  /* ---------------- LOADING ---------------- */
-
   if (isLoading) {
     return (
       <div className="flex justify-center items-center min-h-[60vh]">
@@ -78,8 +70,6 @@ const ManageTickets = () => {
       </div>
     );
   }
-
-  /* ---------------- UI ---------------- */
 
   return (
     <div className="p-6 bg-base-100 min-h-screen">

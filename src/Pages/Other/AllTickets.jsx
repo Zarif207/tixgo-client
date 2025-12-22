@@ -22,7 +22,7 @@ const AllTickets = () => {
   const [sort, setSort] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
 
-  // ---------------- FETCH ----------------
+ 
   useEffect(() => {
     axiosPublic
       .get("/tickets?verificationStatus=approved")
@@ -33,7 +33,7 @@ const AllTickets = () => {
       .catch(() => setLoading(false));
   }, []);
 
-  // ---------------- PROCESS ----------------
+ 
   const processedTickets = useMemo(() => {
     let data = [...tickets];
 
@@ -72,12 +72,12 @@ const AllTickets = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-base-200 via-base-100 to-base-200 px-4 py-12">
       <div className="max-w-7xl mx-auto">
-        {/* TITLE */}
+       
         <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-12">
           Explore <span className="text-primary">All Tickets</span>
         </h2>
 
-        {/* CONTROLS */}
+       
         <div className="bg-base-100/80 backdrop-blur-md border border-base-300 rounded-2xl p-5 mb-12 shadow-lg">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <input
@@ -112,7 +112,7 @@ const AllTickets = () => {
           </div>
         </div>
 
-        {/* GRID */}
+       
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {paginatedTickets.map((ticket) => (
             <div
@@ -127,7 +127,7 @@ const AllTickets = () => {
                 flex flex-col
               "
             >
-              {/* IMAGE */}
+           
               <div className="relative h-52 overflow-hidden">
                 <img
                   src={ticket.image}
@@ -144,7 +144,7 @@ const AllTickets = () => {
                 </span>
               </div>
 
-              {/* BODY */}
+            
               <div className="p-6 flex flex-col flex-grow">
                 <h3 className="text-xl font-bold mb-1 line-clamp-2">
                   {ticket.title}
@@ -155,7 +155,7 @@ const AllTickets = () => {
                   {ticket.from} → {ticket.to}
                 </p>
 
-                {/* META */}
+              
                 <div className="flex flex-wrap gap-2 mb-4">
                   <span className="badge badge-outline">
                     <FaTicketAlt className="mr-1" />
@@ -167,7 +167,7 @@ const AllTickets = () => {
                   </span>
                 </div>
 
-                {/* PERKS */}
+             
                 <div className="mb-4 min-h-[72px] space-y-1">
                   {ticket.perks?.slice(0, 3).map((perk, i) => (
                     <p
@@ -185,7 +185,7 @@ const AllTickets = () => {
                   {ticket.departure}
                 </p>
 
-                {/* BUTTON */}
+                
                 <Link
                   to={`/ticket-details/${ticket._id}`}
                   className="mt-auto"
@@ -199,7 +199,7 @@ const AllTickets = () => {
           ))}
         </div>
 
-        {/* PAGINATION */}
+        
         {totalPages > 1 && (
           <div className="flex flex-wrap justify-center mt-14 gap-2">
             {[...Array(totalPages).keys()].map((n) => (

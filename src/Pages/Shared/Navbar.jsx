@@ -43,9 +43,7 @@ const Navbar = () => {
   return (
     <div className="sticky top-0 z-50 backdrop-blur-md bg-base-100/80 shadow-sm">
       <div className="navbar px-4 sm:px-6 lg:px-10 max-w-7xl mx-auto">
-        {/* LEFT */}
         <div className="navbar-start gap-2">
-          {/* MOBILE MENU */}
           <div className="dropdown md:hidden">
             <label tabIndex={0} className="btn btn-ghost text-2xl px-2">
               ☰
@@ -69,7 +67,7 @@ const Navbar = () => {
             </ul>
           </div>
 
-          {/* LOGO */}
+       
           <Link
             to="/"
             className="flex items-center gap-2 text-xl sm:text-2xl font-bold"
@@ -79,7 +77,7 @@ const Navbar = () => {
           </Link>
         </div>
 
-        {/* CENTER (TABLET + DESKTOP) */}
+       
         <div className="navbar-center hidden md:flex">
           <ul className="menu menu-horizontal gap-1 lg:gap-2">
             <li>
@@ -100,9 +98,9 @@ const Navbar = () => {
           </ul>
         </div>
 
-        {/* RIGHT */}
+       
         <div className="navbar-end gap-2 sm:gap-3">
-          {/* THEME */}
+        
           <button
             onClick={toggleTheme}
             className="btn btn-ghost btn-circle"

@@ -11,8 +11,8 @@ const Extra_1 = () => {
   const routes = [
     {
       id: 1,
-      from: "New York",
-      to: "Washington D.C.",
+      from: "Berlin",
+      to: "Prague, Czech Republic",
       type: "Bus",
       icon: FaBus,
       desc:
@@ -29,8 +29,8 @@ const Extra_1 = () => {
     },
     {
       id: 3,
-      from: "Sydney",
-      to: "Auckland",
+      from: "Oslo",
+      to: "Copenhagen",
       type: "Launch",
       icon: FaShip,
       desc:
@@ -39,7 +39,7 @@ const Extra_1 = () => {
     {
       id: 4,
       from: "Dubai",
-      to: "Tokyo",
+      to: "New York",
       type: "Plane",
       icon: FaPlane,
       desc:
@@ -49,11 +49,11 @@ const Extra_1 = () => {
 
   return (
     <section className="relative bg-gradient-to-b from-base-200/70 via-base-100 to-base-200/70 py-24 px-6 overflow-hidden">
-      {/* background glow */}
+    
       <div className="absolute -top-40 -left-40 w-96 h-96 bg-primary/10 rounded-full blur-3xl" />
       <div className="absolute -bottom-40 -right-40 w-96 h-96 bg-secondary/10 rounded-full blur-3xl" />
 
-      {/* Section Header */}
+     
       <div className="relative max-w-3xl mx-auto text-center mb-24">
         <h2 className="text-4xl md:text-5xl font-extrabold mb-6 tracking-tight">
           Travel, <span className="text-primary">Simplified</span>
@@ -64,7 +64,7 @@ const Extra_1 = () => {
         </p>
       </div>
 
-      {/* Routes */}
+     
       <div className="relative max-w-6xl mx-auto space-y-28">
         {routes.map((route, index) => {
           const Icon = route.icon;
@@ -77,7 +77,7 @@ const Extra_1 = () => {
                 reverse ? "md:flex-row-reverse" : "md:flex-row"
               } items-center gap-14`}
             >
-              {/* ICON */}
+             
               <div className="flex-shrink-0">
                 <div
                   className="
@@ -95,7 +95,7 @@ const Extra_1 = () => {
                 </div>
               </div>
 
-              {/* CARD */}
+             
               <div
                 className="
                   bg-base-100/80 backdrop-blur-xl
@@ -121,10 +121,6 @@ const Extra_1 = () => {
                   {route.desc}
                 </p>
 
-                <p className="text-sm text-base-content/60">
-                  Book globally, travel confidently, and enjoy seamless
-                  journeys powered by a modern ticketing platform.
-                </p>
               </div>
             </div>
           );

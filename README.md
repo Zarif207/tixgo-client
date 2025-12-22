@@ -1,16 +1,59 @@
-# React + Vite
+# 🎟️ Online Ticket Booking Platform (TixGo)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## 🔹 Project Purpose
+A full-stack MERN application where users can discover and book travel tickets (Bus, Train, Launch, Plane).  
+The platform supports **three roles**: User, Vendor, and Admin, with role-based dashboards, ticket management, and secure payments.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🌐 Live URL
+- https://tixgo.vercel.app  
+(or your actual live link)
 
-## React Compiler
+---
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Key Features
 
-## Expanding the ESLint configuration
+-  Firebase Authentication (Email/Password & Google Login)
+-  Role-based access (User, Vendor, Admin)
+-  Ticket booking system with quantity control
+-  Countdown based on departure date & time
+-  Stripe payment integration
+-  Admin & Vendor dashboards
+-  Advertisement system (max 6 advertised tickets)
+-  Search, Filter, Sort & Pagination (All Tickets)
+-  Dark / Light mode toggle
+-  Fully responsive UI
+-  Protected routes & secure APIs (JWT/Firebase Token)
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+---
+
+## NPM Packages Used (Frontend)
+
+- react
+- react-dom
+- react-router
+- @tanstack/react-query
+- axios
+- firebase
+- react-hook-form
+- react-hot-toast
+- sweetalert2
+- tailwindcss
+- @tailwindcss/vite
+- react-icons
+- swiper
+- gsap
+- leaflet
+- react-leaflet
+- recharts
+- stripe
+
+---
+
+## 🛠️ Technology Stack
+- **Frontend**: React, Tailwind CSS
+- **Backend**: Node.js, Express.js
+- **Database**: MongoDB
+- **Authentication**: Firebase
+- **Payment**: Stripe
