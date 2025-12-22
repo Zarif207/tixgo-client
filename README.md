@@ -7,8 +7,7 @@ The platform supports **three roles**: User, Vendor, and Admin, with role-based 
 ---
 
 ## 🌐 Live URL
-- https://tixgo.vercel.app  
-(or your actual live link)
+- https://tixgo.vercel.app 
 
 ---
 
