@@ -1,36 +1,30 @@
-import { useSearchParams, useNavigate } from "react-router";
-import axios from "axios";
-import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router";
+import { useEffect } from "react";
+import UseAxiosSecure from "../../Hooks/UseAxiosSecure";
 
 const PaymentSuccess = () => {
   const [params] = useSearchParams();
-  const navigate = useNavigate();
   const sessionId = params.get("session_id");
-  const [loading, setLoading] = useState(true);
+  const axiosSecure = UseAxiosSecure();
 
   useEffect(() => {
-    if (!sessionId) return;
+    if (sessionId) {
+      axiosSecure.post("/payments/verify", { sessionId });
+    }
+  }, [sessionId, axiosSecure]);
 
-    axios
-      .post(`${import.meta.env.VITE_API_URL}/payments/verify`, {
-        sessionId,
-      })
-      .then(() => {
-        // ✅ redirect after verification
-        navigate("/dashboard/user/transactions", { replace: true });
-      })
-      .finally(() => setLoading(false));
-  }, [sessionId, navigate]);
-
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <span className="loading loading-spinner loading-lg"></span>
+  return (
+    <div className="min-h-screen flex items-center justify-center">
+      <div className="text-center">
+        <h1 className="text-3xl font-bold text-green-600">
+          Payment Successful 🎉
+        </h1>
+        <p className="mt-2 text-gray-500">
+          Your ticket has been confirmed.
+        </p>
       </div>
-    );
-  }
-
-  return null;
+    </div>
+  );
 };
 
 export default PaymentSuccess;

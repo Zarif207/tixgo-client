@@ -6,7 +6,6 @@ import UseAuth from "./UseAuth";
 
 const axiosSecure = axios.create({
   baseURL: import.meta.env.VITE_API_URL || "https://tixgo-server.vercel.app",
-   
 });
 
 const UseAxiosSecure = () => {

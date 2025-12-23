@@ -1,6 +1,5 @@
 import { createBrowserRouter } from "react-router";
 
-
 import PrivateRoute from "../Routes/PrivateRoute";
 import AdminRoute from "../Routes/AdminRoute";
 import VendorRoute from "../Routes/VendorRoute";
@@ -8,8 +7,6 @@ import UserRoute from "../Routes/UserRoute";
 import RootLayout from "../Layouts/RootLayout";
 import AuthLayout from "../Layouts/AuthLayout";
 import DashboardLayout from "../Layouts/DashboardLayout";
-
-
 
 
 import Home from "../Pages/Home/Home";

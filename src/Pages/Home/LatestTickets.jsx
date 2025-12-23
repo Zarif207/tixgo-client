@@ -102,7 +102,7 @@ const LatestTickets = () => {
                   <p className="flex items-center gap-2">
                     <FaTag className="text-primary" />
                     <span className="font-semibold">${ticket.price}</span>
-                    <span className="opacity-70">/ unit</span>
+                    <span className="opacity-70">/ ticket</span>
                   </p>
 
                   <p className="flex items-center gap-2">

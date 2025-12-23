@@ -43,7 +43,9 @@ const MyBookedTickets = () => {
   }, [bookedTickets]);
 
   const canPay = (ticket) =>
-    ticket.status === "accepted" && new Date(ticket.departure) > new Date();
+  ticket.status === "accepted" &&
+  ticket.paymentStatus !== "paid" &&
+  new Date(ticket.departure) > new Date();
 
   const statusBadge = (status) => {
     switch (status) {
@@ -122,7 +124,7 @@ const MyBookedTickets = () => {
                 <button
                   onClick={() =>
                     axiosSecure
-                      .post("/create-ticket-checkout", {
+                      .post("/payments/create-checkout-session", {
                         bookingId: ticket._id,
                       })
                       .then((res) => (window.location.href = res.data.url))
