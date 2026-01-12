@@ -49,11 +49,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "all-tickets",
-        element: (
-          <PrivateRoute>
-            <AllTickets />
-          </PrivateRoute>
-        ),
+        element: <AllTickets />
       },
       {
         path: "ticket-details/:id",
