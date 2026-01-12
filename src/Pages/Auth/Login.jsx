@@ -42,7 +42,7 @@ const Login = () => {
         password: "VendorPass!",
       },
       user: {
-        email: "user@gmail.com",
+        email: "useraccount@gmail.com",
         password: "UserPass1!",
       },
     };
