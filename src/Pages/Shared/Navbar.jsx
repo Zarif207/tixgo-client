@@ -61,6 +61,16 @@ const Navbar = () => {
                   Dashboard
                 </NavLink>
               </li>
+              <li>
+                <NavLink to="/terms-and-conditions" className={navItemClass}>
+                  Terms & Conditions
+                </NavLink>
+              </li>
+              <li>
+              <NavLink to="/our-networks" className={navItemClass}>
+                Our Networks
+              </NavLink>
+            </li>
             </ul>
           </div>
 
@@ -92,6 +102,16 @@ const Navbar = () => {
             <li>
               <NavLink to="/dashboard" className={navItemClass}>
                 Dashboard
+              </NavLink>
+            </li>
+            <li>
+              <NavLink to="/terms-and-conditions" className={navItemClass}>
+                Terms & Conditions
+              </NavLink>
+            </li>
+            <li>
+              <NavLink to="/our-networks" className={navItemClass}>
+                Our Networks
               </NavLink>
             </li>
           </ul>

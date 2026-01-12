@@ -8,7 +8,6 @@ import RootLayout from "../Layouts/RootLayout";
 import AuthLayout from "../Layouts/AuthLayout";
 import DashboardLayout from "../Layouts/DashboardLayout";
 
-
 import Home from "../Pages/Home/Home";
 import AllTickets from "../Pages/Other/AllTickets";
 import TicketDetails from "../Pages/Other/TicketDetails";
@@ -33,6 +32,8 @@ import About from "../Pages/Other/About";
 import ContactUs from "../Pages/Other/ContactUs";
 import ErrorPage from "../Pages/Other/ErrorPage";
 import NavProfile from "../Pages/Other/NavProfile";
+import Terms from "../Pages/Other/Terms";
+import Map from "../Pages/Other/Map";
 
 export const router = createBrowserRouter([
   // -------------------------------------------------
@@ -56,11 +57,15 @@ export const router = createBrowserRouter([
       },
       {
         path: "ticket-details/:id",
-        element: (
-          <PrivateRoute>
-            <TicketDetails />
-          </PrivateRoute>
-        ),
+        element: <TicketDetails />,
+      },
+      {
+        path: "terms-and-conditions",
+        element: <Terms />,
+      },
+      {
+        path: "our-networks",
+        element: <Map />,
       },
 
       {
@@ -84,9 +89,9 @@ export const router = createBrowserRouter([
         element: <ContactUs />,
       },
       {
-        path: 'nav-profile',
-        element: <NavProfile/>
-      }
+        path: "nav-profile",
+        element: <NavProfile />,
+      },
     ],
   },
 

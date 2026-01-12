@@ -6,7 +6,6 @@ import UseAuth from "../../Hooks/UseAuth";
 import SocialLogin from "./SocialLogin";
 import { errorAlert, successAlert } from "../../Utils/swal";
 
-
 const getAuthErrorMessage = (err) => {
   if (!err?.code) return "Login failed. Please try again.";
 
@@ -29,14 +28,36 @@ const Login = () => {
     register,
     handleSubmit,
     formState: { errors },
+    setValue,
   } = useForm();
+
+  const fillDemo = (role) => {
+    const credentials = {
+      admin: {
+        email: "zarifadmin@gmail.com",
+        password: "AdminPass!",
+      },
+      vendor: {
+        email: "ahmedvendor@gmail.com",
+        password: "VendorPass!",
+      },
+      user: {
+        email: "user@gmail.com",
+        password: "UserPass1!",
+      },
+    };
+
+    setValue("email", credentials[role].email);
+    setValue("password", credentials[role].password);
+
+    document.getElementById("demo_modal").close();
+  };
 
   const { user, signInUser } = UseAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const [showPassword, setShowPassword] = useState(false);
 
-  
   const from = location.state?.from?.pathname || "/";
   if (user) {
     return <Navigate to={from} replace />;
@@ -56,9 +77,7 @@ const Login = () => {
 
   return (
     <div className="max-w-md mx-auto p-8 rounded-3xl shadow-xl bg-base-100">
-      <h2 className="text-4xl font-extrabold text-center mb-6">
-        Login
-      </h2>
+      <h2 className="text-4xl font-extrabold text-center mb-6">Login</h2>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         {/* Email */}
@@ -70,9 +89,7 @@ const Login = () => {
             className="input input-bordered w-full"
           />
           {errors.email && (
-            <p className="text-red-500 text-sm mt-1">
-              {errors.email.message}
-            </p>
+            <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
           )}
         </div>
 
@@ -106,9 +123,7 @@ const Login = () => {
           )}
         </div>
 
-        <button className="btn btn-primary w-full text-lg">
-          Login
-        </button>
+        <button className="btn btn-primary w-full text-lg">Login</button>
       </form>
 
       <p className="text-center mt-4">
@@ -119,6 +134,64 @@ const Login = () => {
       </p>
 
       <SocialLogin />
+      <button
+        onClick={() => document.getElementById("demo_modal").showModal()}
+        className="w-full
+    flex items-center justify-center gap-3
+    py-2.5
+    mt-4
+    rounded-xl
+    border border-base-300
+    bg-white
+    hover:bg-blue-50
+    text-[#455060]
+    transition
+    font-medium"
+      >
+        Demo Credentials
+      </button>
+
+      <dialog id="demo_modal" className="modal">
+        <div className="modal-box max-w-sm rounded-2xl bg-base-100 border border-base-300">
+          {/* Title */}
+          <h3 className="text-lg font-semibold text-center mb-5">
+            Demo Credentials
+          </h3>
+
+          {/* Buttons */}
+          <div className="flex flex-col gap-3">
+            <button
+              onClick={() => fillDemo("user")}
+              className="btn btn-ghost border border-base-300 hover:bg-base-200 w-full"
+            >
+              User
+            </button>
+
+            <button
+              onClick={() => fillDemo("vendor")}
+              className="btn btn-ghost border border-base-300 hover:bg-base-200 w-full"
+            >
+              Vendor
+            </button>
+
+            <button
+              onClick={() => fillDemo("admin")}
+              className="btn btn-ghost border border-error text-error hover:bg-error/10 w-full"
+            >
+              Admin
+            </button>
+          </div>
+
+          {/* Close */}
+          <div className="mt-6 text-center">
+            <form method="dialog">
+              <button className="text-sm opacity-60 hover:opacity-100">
+                Close
+              </button>
+            </form>
+          </div>
+        </div>
+      </dialog>
     </div>
   );
 };
