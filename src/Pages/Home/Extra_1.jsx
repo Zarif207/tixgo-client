@@ -81,7 +81,7 @@ const Extra_1 = () => {
               <div className="shrink-0">
                 <div
                   className="
-                    w-32 h-32 rounded-[2rem]
+                    w-32 h-32 rounded-4xl
                     bg-gradient-to-br from-primary to-primary/80
                     text-primary-content
                     flex items-center justify-center

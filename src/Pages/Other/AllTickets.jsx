@@ -70,7 +70,7 @@ const AllTickets = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-base-200 via-base-100 to-base-200 px-4 py-12">
+    <div className="min-h-screen bg-linear-to-br from-base-200 via-base-100 to-base-200 px-4 py-12">
       <div className="max-w-7xl mx-auto">
        
         <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-12">
