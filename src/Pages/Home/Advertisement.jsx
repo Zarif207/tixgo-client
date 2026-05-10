@@ -29,7 +29,7 @@ const Advertisement = () => {
   }
 
   return (
-    <section className="relative py-28 px-4 bg-gradient-to-br from-base-200 via-base-100 to-base-200">
+    <section className="relative py-28 px-4 bg-linear-to-br from-base-200 via-base-100 to-base-200">
       <div className="max-w-7xl mx-auto">
         {/* HEADER */}
         <div className="text-center mb-16 max-w-3xl mx-auto">
@@ -71,7 +71,7 @@ const Advertisement = () => {
                 />
 
                
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+                <div className="absolute inset-0 bg-linear-to-t from-black/60 via-transparent to-transparent"></div>
 
               
                 <div className="absolute bottom-4 left-4 bg-primary text-primary-content px-4 py-1 rounded-full text-sm font-bold shadow">
