@@ -80,7 +80,7 @@ const Advertisement = () => {
               </div>
 
             
-              <div className="p-6 flex flex-col flex-grow">
+              <div className="p-6 flex flex-col grow">
                
                 <h3 className="text-xl font-semibold mb-1">
                   {ticket.title}
