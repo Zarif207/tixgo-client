@@ -48,7 +48,7 @@ const Extra_1 = () => {
   ];
 
   return (
-    <section className="relative bg-gradient-to-b from-base-200/70 via-base-100 to-base-200/70 py-24 px-6 overflow-hidden">
+    <section className="relative bg-linear-to-b from-base-200/70 via-base-100 to-base-200/70 py-24 px-6 overflow-hidden">
     
       <div className="absolute -top-40 -left-40 w-96 h-96 bg-primary/10 rounded-full blur-3xl" />
       <div className="absolute -bottom-40 -right-40 w-96 h-96 bg-secondary/10 rounded-full blur-3xl" />
@@ -78,7 +78,7 @@ const Extra_1 = () => {
               } items-center gap-14`}
             >
              
-              <div className="flex-shrink-0">
+              <div className="shrink-0">
                 <div
                   className="
                     w-32 h-32 rounded-[2rem]
