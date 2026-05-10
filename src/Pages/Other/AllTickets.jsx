@@ -145,7 +145,7 @@ const AllTickets = () => {
               </div>
 
             
-              <div className="p-6 flex flex-col flex-grow">
+              <div className="p-6 flex flex-col grow">
                 <h3 className="text-xl font-bold mb-1 line-clamp-2">
                   {ticket.title}
                 </h3>

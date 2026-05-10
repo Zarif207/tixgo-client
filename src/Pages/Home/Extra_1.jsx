@@ -82,7 +82,7 @@ const Extra_1 = () => {
                 <div
                   className="
                     w-32 h-32 rounded-4xl
-                    bg-gradient-to-br from-primary to-primary/80
+                    bg-linear-to-br from-primary to-primary/80
                     text-primary-content
                     flex items-center justify-center
                     text-5xl
